@@ -7,44 +7,6 @@ type Game struct {
 	//Meta map[string]interface{} `ubjson:"metadata"`
 }
 
-//
-//func (c *Metadata) UBJSONType() ubjson.Marker {
-//	return ubjson.ObjectStartMarker
-//}
-//
-//func (c *Metadata) MarshalUBJSON(e *ubjson.Encoder) error {
-//	return nil
-//}
-//
-//func (c *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
-//	o, err := d.Object()
-//	if err != nil {
-//		return err
-//	}
-//
-//	for o.NextEntry() {
-//		k, err := o.DecodeKey()
-//		if err != nil {
-//			return err
-//		}
-//
-//		switch k {
-//		case "startAt":
-//			s, err := o.DecodeString()
-//			if err != nil {
-//				return err
-//			}
-//
-//			c.StartAt = s
-//
-//		default:
-//			fmt.Printf("k was %s\n", k)
-//		}
-//	}
-//
-//	return nil
-//}
-
 type Game2 struct {
 	FieldA string `ubjson:"fielda"`
 	FieldB string
