@@ -2,8 +2,10 @@ package slippi
 
 import (
 	"fmt"
+	"github.com/PMcca/go-slippi/slippi/melee"
 	"github.com/jmank88/ubjson"
 	"github.com/pkg/errors"
+	"strconv"
 )
 
 // Metadata represents the parsed metadata element from a .slp file.
@@ -14,8 +16,17 @@ type Metadata struct {
 	PlayedOn  string                 `ubjson:"playedOn"`
 }
 
+// Character is the Melee character that was present in the match, including how long said player was played.
+type Character struct {
+	CharacterID  melee.InternalCharacterID
+	FramesPlayed int
+}
+
+// Player is a single player in the game including their Slippi display name or in-game name (dependent on online/local).
 type Player struct {
-	Name string
+	Name       string
+	Port       int
+	Characters []Character
 }
 
 func (c *Metadata) UBJSONType() ubjson.Marker {
@@ -72,6 +83,10 @@ func (c *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 			//if err != nil {
 			//	return errors.Wrap(err, "could not decode players object")
 			//}
+			//err = o.DecodeObject(parsePlayers(c, d))
+			//if err != nil {
+			//	return err
+			//}
 
 			players := make(map[string]interface{})
 			err = o.Decode(&players)
@@ -106,4 +121,30 @@ func (c *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 	}
 
 	return nil
+}
+
+// parsePlayers parses the Players object given by the ObjectDecoder and sets it to the Metadata's Players field.
+func parsePlayers(m *Metadata, d *ubjson.Decoder) func(decoder *ubjson.ObjectDecoder) error {
+	return func(o *ubjson.ObjectDecoder) error {
+		for o.NextEntry() {
+			p, err := o.DecodeKey()
+			if err != nil {
+				return errors.Wrap(err, "could not decode players key")
+			}
+
+			switch p {
+			case "0", "1", "2", "3":
+				port, err := strconv.Atoi(p)
+				if err != nil {
+					return errors.WithMessagef(err, "could not convert port  %s to int", p)
+				}
+				fmt.Println(port)
+
+			default:
+				return errors.New(fmt.Sprintf("unknown key in players object. expected port, got %s", p))
+			}
+		}
+
+		return nil
+	}
 }
