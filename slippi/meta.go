@@ -10,23 +10,28 @@ import (
 
 // Metadata represents the parsed metadata element from a .slp file.
 type Metadata struct {
-	StartAt   string                 `ubjson:"startAt"`
-	LastFrame int32                  `ubjson:"lastFrame"`
-	Players   map[string]interface{} `ubjson:"players"`
-	PlayedOn  string                 `ubjson:"playedOn"`
+	StartAt   string    `ubjson:"startAt"`
+	LastFrame int32     `ubjson:"lastFrame"`
+	Players   []*Player `ubjson:"players"`
+	PlayedOn  string    `ubjson:"playedOn"`
 }
 
 // Character is the Melee character that was present in the match, including how long said player was played.
 type Character struct {
 	CharacterID  melee.InternalCharacterID
-	FramesPlayed int
+	FramesPlayed int32
 }
 
 // Player is a single player in the game including their Slippi display name or in-game name (dependent on online/local).
 type Player struct {
-	Name       string
+	Name       Names `ubjson:"names"`
 	Port       int
 	Characters []Character
+}
+
+type Names struct {
+	Name       string `ubjson:"netplay,omitempty"`
+	SlippiCode string `ubjson:"code,omitempty"`
 }
 
 func (c *Metadata) UBJSONType() ubjson.Marker {
@@ -88,17 +93,21 @@ func (c *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 			//	return err
 			//}
 
-			players := make(map[string]interface{})
-			err = o.Decode(&players)
+			err := o.DecodeObject(parsePlayers(c))
 			if err != nil {
-				return errors.Wrap(err, "could not decode players into map")
+				return errors.Wrap(err, "could not parse players")
 			}
+			//players := make(map[string]interface{})
+			//err = o.Decode(&players)
+			//if err != nil {
+			//	return errors.Wrap(err, "could not decode players into map")
+			//}
 			//p, err := o.DecodeString()
 			//if err != nil {
 			//	return err
 			//}
 
-			c.Players = players
+			//c.Players = players
 
 		case "characters":
 			s, err := o.DecodeString()
@@ -124,7 +133,7 @@ func (c *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 }
 
 // parsePlayers parses the Players object given by the ObjectDecoder and sets it to the Metadata's Players field.
-func parsePlayers(m *Metadata, d *ubjson.Decoder) func(decoder *ubjson.ObjectDecoder) error {
+func parsePlayers(m *Metadata) func(decoder *ubjson.ObjectDecoder) error {
 	return func(o *ubjson.ObjectDecoder) error {
 		for o.NextEntry() {
 			p, err := o.DecodeKey()
@@ -134,17 +143,78 @@ func parsePlayers(m *Metadata, d *ubjson.Decoder) func(decoder *ubjson.ObjectDec
 
 			switch p {
 			case "0", "1", "2", "3":
+				player := &Player{}
+
 				port, err := strconv.Atoi(p)
 				if err != nil {
 					return errors.WithMessagef(err, "could not convert port  %s to int", p)
 				}
-				fmt.Println(port)
+
+				// Parse characters
+				err = o.DecodeObject(func(d *ubjson.ObjectDecoder) error {
+					for d.NextEntry() {
+						k, err := d.DecodeKey()
+						if err != nil {
+							return errors.Wrap(err, "could not decode key in players object")
+						}
+
+						switch k {
+						case "characters":
+							err = d.DecodeObject(parseCharacters(player))
+							if err != nil {
+								return errors.Wrap(err, "could not decode characters object")
+							}
+
+						case "names":
+							names := &Names{}
+							err = d.Decode(names)
+							if err != nil {
+								return errors.Wrap(err, "could not decode names")
+							}
+							player.Name = *names
+						}
+					}
+					return d.End()
+				})
+				if err != nil {
+					return errors.Wrap(err, "could not parse characters object")
+				}
+				fmt.Println("port: ", port)
 
 			default:
 				return errors.New(fmt.Sprintf("unknown key in players object. expected port, got %s", p))
 			}
 		}
 
-		return nil
+		return o.End()
+	}
+}
+
+// parseCharacters parses the characters UBJSON object in the players parent object.
+func parseCharacters(player *Player) func(decoder *ubjson.ObjectDecoder) error {
+	return func(o *ubjson.ObjectDecoder) error {
+		for o.NextEntry() {
+			id, err := o.DecodeKey()
+			if err != nil {
+				return errors.Wrap(err, "could not decode characterID key")
+			}
+
+			characterID, err := strconv.Atoi(id)
+			if err != nil {
+				return errors.Wrap(err, "could not convert characterID to int")
+			}
+
+			framesPlayed, err := o.DecodeInt32()
+			if err != nil {
+				return errors.Wrap(err, "could not decode frames played")
+			}
+
+			player.Characters = append(player.Characters, Character{
+				CharacterID:  melee.InternalCharacterID(characterID),
+				FramesPlayed: framesPlayed,
+			})
+		}
+
+		return o.End()
 	}
 }

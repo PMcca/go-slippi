@@ -10,7 +10,7 @@ import (
 
 func main() {
 	//marshalUBJSONTest()
-	f, err := os.Open("replays/netplay-online.slp")
+	f, err := os.Open("replays/zelda-shiek.slp")
 	if err != nil {
 		log.Fatal(err)
 	}
