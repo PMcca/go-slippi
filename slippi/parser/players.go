@@ -2,4 +2,7 @@ package parser
 
 import "github.com/PMcca/go-slippi/slippi"
 
-func ParsePlayers(m *slippi.Metadata)
+// ParsePlayers blah
+func ParsePlayers(m *slippi.Metadata) {
+	//TODO maybe don't need this?
+}

@@ -30,19 +30,20 @@ type Player struct {
 }
 
 type Names struct {
-	Name       string `ubjson:"netplay,omitempty"`
-	SlippiCode string `ubjson:"code,omitempty"`
+	Name       string `ubjson:"netplay"`
+	SlippiCode string `ubjson:"code"`
 }
 
-func (c *Metadata) UBJSONType() ubjson.Marker {
+func (m *Metadata) UBJSONType() ubjson.Marker {
 	return ubjson.ObjectStartMarker
 }
 
-func (c *Metadata) MarshalUBJSON(e *ubjson.Encoder) error {
+func (m *Metadata) MarshalUBJSON(e *ubjson.Encoder) error {
+	//TODO: Support encoding later?
 	return nil
 }
 
-func (c *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
+func (m *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 	o, err := d.Object()
 	if err != nil {
 		return err
@@ -60,40 +61,17 @@ func (c *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 			if err != nil {
 				return errors.Wrap(err, "could not decode string for startAt")
 			}
-			c.StartAt = s
+			m.StartAt = s
 
 		case "lastFrame":
 			l, err := o.DecodeInt32()
 			if err != nil {
 				return errors.Wrap(err, "could not decode string for lastFrame")
 			}
-			c.LastFrame = l
+			m.LastFrame = l
 
 		case "players":
-			//err = o.DecodeObject(func(decoder *ubjson.ObjectDecoder) error {
-			//	for i := 0; i < 4; i++ {
-			//		a, err := decoder.DecodeKey()
-			//		if err != nil {
-			//			return errors.Wrap(err, "could not decode key for inside players func")
-			//		}
-			//
-			//		switch a {
-			//		case "0","1","2","3":
-			//			fmt.Println("key is ", a)
-			//
-			//		}
-			//	}
-			//	return nil
-			//})
-			//if err != nil {
-			//	return errors.Wrap(err, "could not decode players object")
-			//}
-			//err = o.DecodeObject(parsePlayers(c, d))
-			//if err != nil {
-			//	return err
-			//}
-
-			err := o.DecodeObject(parsePlayers(c))
+			err := o.DecodeObject(parsePlayers(m))
 			if err != nil {
 				return errors.Wrap(err, "could not parse players")
 			}
@@ -102,27 +80,13 @@ func (c *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 			//if err != nil {
 			//	return errors.Wrap(err, "could not decode players into map")
 			//}
-			//p, err := o.DecodeString()
-			//if err != nil {
-			//	return err
-			//}
-
-			//c.Players = players
-
-		case "characters":
-			s, err := o.DecodeString()
-			if err != nil {
-				return err
-			}
-
-			fmt.Println(s)
 
 		case "playedOn":
 			s, err := o.DecodeString()
 			if err != nil {
 				return errors.Wrap(err, "could not decode string for playedOn")
 			}
-			c.PlayedOn = s
+			m.PlayedOn = s
 
 		default:
 			fmt.Printf("k was %s\n", k)
@@ -143,14 +107,17 @@ func parsePlayers(m *Metadata) func(decoder *ubjson.ObjectDecoder) error {
 
 			switch p {
 			case "0", "1", "2", "3":
-				player := &Player{}
 
 				port, err := strconv.Atoi(p)
 				if err != nil {
 					return errors.WithMessagef(err, "could not convert port  %s to int", p)
 				}
 
-				// Parse characters
+				player := Player{
+					Port: port,
+				}
+
+				// Parse this player's fields
 				err = o.DecodeObject(func(d *ubjson.ObjectDecoder) error {
 					for d.NextEntry() {
 						k, err := d.DecodeKey()
@@ -160,18 +127,18 @@ func parsePlayers(m *Metadata) func(decoder *ubjson.ObjectDecoder) error {
 
 						switch k {
 						case "characters":
-							err = d.DecodeObject(parseCharacters(player))
+							err = d.DecodeObject(parseCharacters(&player))
 							if err != nil {
 								return errors.Wrap(err, "could not decode characters object")
 							}
 
 						case "names":
-							names := &Names{}
-							err = d.Decode(names)
+							names := Names{}
+							err = d.Decode(&names)
 							if err != nil {
 								return errors.Wrap(err, "could not decode names")
 							}
-							player.Name = *names
+							player.Name = names
 						}
 					}
 					return d.End()
@@ -179,7 +146,8 @@ func parsePlayers(m *Metadata) func(decoder *ubjson.ObjectDecoder) error {
 				if err != nil {
 					return errors.Wrap(err, "could not parse characters object")
 				}
-				fmt.Println("port: ", port)
+
+				m.Players = append(m.Players, &player)
 
 			default:
 				return errors.New(fmt.Sprintf("unknown key in players object. expected port, got %s", p))
