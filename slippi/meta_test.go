@@ -2,13 +2,18 @@ package slippi_test
 
 import (
 	"bytes"
+	"encoding/hex"
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/jmank88/ubjson"
 	"github.com/stretchr/testify/require"
+	"log"
 	"testing"
 )
 
-const metaUBJSON = `[{][i][i:7][S:startAt][S][i][i:21][S:2022-08-28T15:51:13ZU][i][i:9][S:lastFrame][I][I:2011][i][i:7][S:players][{][i][i:1][S:0][{][i][i:10][S:characters][{][i][i:1][S:4][I][I:567][i][i:1][S:5][i][i:77][}][i][i:5][S:names][{][i][i:7][S:netplay][S][i][i:12][S:netplay-name][i][i:4][S:code][S][i][i:8][S:TEST#001][}][}][i][i:1][S:1][{][i][i:10][S:characters][{][i][i:1][S:1][i][i:123][}][}][}][}]`
+// This is hacky, but represents valid UBJSON.
+const metadataUBJSON = "7B690773746172744174536915323032322D30382D32385431353A35313A31335A5569096C6173744672616D656C000100016907706C61796572737B6901307B69056E616D65737B69076E6574706C61795369074D616E79756C616904636F64655369084D414E59233434347D690A636861726163746572737B6901326C000100017D7D6901317B69056E616D65737B69076E6574706C61795369044A6F686E6904636F64655369064A41592334347D690A636861726163746572737B6901336C000100017D7D7D7D"
+
+var as = []byte{123, 105, 7, 115, 116, 97, 114, 116, 65, 116, 83, 105, 21, 50, 48, 50, 50, 45, 48, 56, 45, 50, 56, 84, 49, 53, 58, 53, 49, 58, 49, 51, 90, 85, 105, 9, 108, 97, 115, 116, 70, 114, 97, 109, 101, 108, 0, 1, 0, 1, 105, 7, 112, 108, 97, 121, 101, 114, 115, 123, 105, 1, 48, 123, 105, 5, 110, 97, 109, 101, 115, 123, 105, 7, 110, 101, 116, 112, 108, 97, 121, 83, 105, 7, 77, 97, 110, 121, 117, 108, 97, 105, 4, 99, 111, 100, 101, 83, 105, 8, 77, 65, 78, 89, 35, 52, 52, 52, 125, 105, 10, 99, 104, 97, 114, 97, 99, 116, 101, 114, 115, 123, 105, 1, 50, 108, 0, 1, 0, 1, 125, 125, 105, 1, 49, 123, 105, 5, 110, 97, 109, 101, 115, 123, 105, 7, 110, 101, 116, 112, 108, 97, 121, 83, 105, 4, 74, 111, 104, 110, 105, 4, 99, 111, 100, 101, 83, 105, 6, 74, 65, 89, 35, 52, 52, 125, 105, 10, 99, 104, 97, 114, 97, 99, 116, 101, 114, 115, 123, 105, 1, 51, 108, 0, 1, 0, 1, 125, 125, 125, 125}
 
 func TestUnmarshalUBJSON(t *testing.T) {
 	t.Parallel()
@@ -25,9 +30,17 @@ func TestUnmarshalUBJSON(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			d := ubjson.NewDecoder(bytes.NewReader([]byte(metaUBJSON)))
+			b, err := hex.DecodeString(metadataUBJSON)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			d := ubjson.NewDecoder(bytes.NewReader(as))
 			meta := slippi.Metadata{}
-			err := meta.UnmarshalUBJSON(d)
+			if er := ubjson.Unmarshal(b, &meta); err != nil {
+				log.Fatal(er)
+			}
+			err = meta.UnmarshalUBJSON(d)
 
 			tc.ErrAssertion(t, err)
 

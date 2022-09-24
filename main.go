@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/jmank88/ubjson"
+	"io"
 	"log"
 	"os"
 )
@@ -14,19 +15,39 @@ const a = `[i][i:8][S:metadata][{][i][i:7][S:startAt][S][i][i:21][S:2022-08-28T1
 const b = "7B69086D657461646174617B690773746172744174536915323032322D30382D32385431353A35313A31335A5569096C6173744672616D654907DB6907706C61796572737B6901307B690A636861726163746572737B690134490237690135694D7D69056E616D65737B69076E6574706C617953690C6E6574706C61792D6E616D656904636F646553690854455354233030317D7D6901317B690A636861726163746572737B690131697B7D7D7D7D7D"
 const c = "7B69066669656C64315369036162637D"
 const d = "[{][i][6][field1][S][i][3][abc][}]"
+const e = `{UstartAtSU2022-08-28T15:51:13ZU      lastFramel�Uplayers{U0{Unames{}Ucharacters{U19lU7lC}}U1{Unames{}Ucharacters{U0W}}}playedOnSUdolphin}`
+
+func ba() {
+	as, err := hex.DecodeString(b)
+	if err != nil {
+		log.Fatal(err)
+	}
+	reader := bytes.NewReader(as)
+	dec := ubjson.NewDecoder(reader)
+	p := make(map[string]interface{})
+	if err = dec.Decode(&p); err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(as))
+
+	os.Exit(0)
+}
 
 func main() {
-	byt, err := ubjson.MarshalBlock(d)
-	if err != nil {
-		log.Fatal(err)
-	}
+	ba()
 
-	data, err := hex.DecodeString(c)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(data)
-	fmt.Println(byt)
+	//byt, err := ubjson.MarshalBlock(d)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//data, err := hex.DecodeString(c)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//fmt.Println(data)
+	//fmt.Println(byt)
 	//marshalUBJSONTest()
 	f, err := os.Open("replays/zelda-shiek.slp")
 	if err != nil {
@@ -34,8 +55,13 @@ func main() {
 	}
 	defer f.Close()
 
-	bloo := bytes.NewReader(data)
-	d := ubjson.NewDecoder(bloo)
+	asd, err := io.ReadAll(f)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(asd))
+
+	d := ubjson.NewDecoder(f)
 	p := make(map[string]interface{})
 	if err = d.Decode(&p); err != nil {
 		log.Fatal(err)
