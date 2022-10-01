@@ -1,8 +1,6 @@
 package main
 
 import (
-	"bytes"
-	"encoding/hex"
 	"fmt"
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/jmank88/ubjson"
@@ -11,25 +9,44 @@ import (
 	"os"
 )
 
-const a = `[i][i:8][S:metadata][{][i][i:7][S:startAt][S][i][i:21][S:2022-08-28T15:51:13ZU][i][i:9][S:lastFrame][I][I:2011][i][i:7][S:players][{][i][i:1][S:0][{][i][i:10][S:characters][{][i][i:1][S:4][I][I:567][i][i:1][S:5][i][i:77][}][i][i:5][S:names][{][i][i:7][S:netplay][S][i][i:12][S:netplay-name][i][i:4][S:code][S][i][i:8][S:TEST#001][}][}][i][i:1][S:1][{][i][i:10][S:characters][{][i][i:1][S:1][i][i:123][}][}][}][}]`
-const b = "7B69086D657461646174617B690773746172744174536915323032322D30382D32385431353A35313A31335A5569096C6173744672616D654907DB6907706C61796572737B6901307B690A636861726163746572737B690134490237690135694D7D69056E616D65737B69076E6574706C617953690C6E6574706C61792D6E616D656904636F646553690854455354233030317D7D6901317B690A636861726163746572737B690131697B7D7D7D7D7D"
-const c = "7B69066669656C64315369036162637D"
-const d = "[{][i][6][field1][S][i][3][abc][}]"
-const e = `{UstartAtSU2022-08-28T15:51:13ZU      lastFramel�Uplayers{U0{Unames{}Ucharacters{U19lU7lC}}U1{Unames{}Ucharacters{U0W}}}playedOnSUdolphin}`
+const asdasd = "7B690773746172744174536915323032322D30382D32385431353A35313A31335A5569096C6173744672616D65490BB86907706C61796572737B6901307B69056E616D65737B69076E6574706C617953690C4E6574706C6179204E616D656904636F646553690854455354233030317D690A636861726163746572737B690137490AF06902313955C87D7D6901317B69056E616D65737B69076E6574706C617953690E4E6574706C6179204E616D6520326904636F646553690854455354233030327D690A636861726163746572737B690133490BB87D7D7D7D"
 
-func ba() {
-	as, err := hex.DecodeString(b)
+func checkErr(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	reader := bytes.NewReader(as)
-	dec := ubjson.NewDecoder(reader)
-	p := make(map[string]interface{})
-	if err = dec.Decode(&p); err != nil {
+}
+
+func ba() {
+	gloo, err := os.Open("valid-meta.ubj")
+	checkErr(err)
+
+	defer gloo.Close()
+
+	b, err := io.ReadAll(gloo)
+	checkErr(err)
+	m := slippi.Metadata{}
+	if err = ubjson.Unmarshal(b, &m); err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(string(as))
+	fmt.Println(m)
+	//as, err := hex.DecodeString(asdasd)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//if err := os.WriteFile("valid-meta.ubj", as, 0644); err != nil {
+	//	log.Fatal(err)
+	//}
+
+	//reader := bytes.NewReader(as)
+	//dec := ubjson.NewDecoder(reader)
+	//p := make(map[string]interface{})
+	//if err = dec.Decode(&p); err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//fmt.Println(string(as))
 
 	os.Exit(0)
 }

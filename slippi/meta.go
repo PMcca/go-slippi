@@ -11,7 +11,7 @@ import (
 // Metadata represents the parsed metadata element from a .slp file.
 type Metadata struct {
 	StartAt   string    `ubjson:"startAt"`
-	LastFrame int32     `ubjson:"lastFrame"`
+	LastFrame int       `ubjson:"lastFrame"`
 	Players   []*Player `ubjson:"players"`
 	PlayedOn  string    `ubjson:"playedOn"`
 }
@@ -19,7 +19,7 @@ type Metadata struct {
 // Character is the Melee character that was present in the match, including how long said player was played.
 type Character struct {
 	CharacterID  melee.InternalCharacterID
-	FramesPlayed int32
+	FramesPlayed int
 }
 
 // Player is a single player in the game including their Slippi display name or in-game name (dependent on online/local).
@@ -64,7 +64,7 @@ func (m *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 			m.StartAt = s
 
 		case "lastFrame":
-			l, err := o.DecodeInt32()
+			l, err := o.DecodeInt()
 			if err != nil {
 				return errors.Wrap(err, "could not decode string for lastFrame")
 			}
@@ -172,7 +172,7 @@ func parseCharacters(player *Player) func(decoder *ubjson.ObjectDecoder) error {
 				return errors.Wrap(err, "could not convert characterID to int")
 			}
 
-			framesPlayed, err := o.DecodeInt32()
+			framesPlayed, err := o.DecodeInt()
 			if err != nil {
 				return errors.Wrap(err, "could not decode frames played")
 			}
