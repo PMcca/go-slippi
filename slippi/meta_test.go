@@ -6,11 +6,12 @@ import (
 	"github.com/PMcca/go-slippi/slippi/melee"
 	"github.com/jmank88/ubjson"
 	"github.com/stretchr/testify/require"
-	"log"
 	"testing"
 )
 
 func TestUnmarshalUBJSON(t *testing.T) {
+
+	// See testdata/README for description of test data used.
 	parsedMeta := slippi.Metadata{
 		StartAt:   "2022-08-28T15:51:13ZU",
 		LastFrame: 3000,
@@ -59,6 +60,11 @@ func TestUnmarshalUBJSON(t *testing.T) {
 			expected:        parsedMeta,
 			errAssertion:    require.NoError,
 		},
+		"InvalidFieldTypeReturnsError": {
+			fixtureFilename: "invalid-lastFrame.ubj",
+			expected:        slippi.Metadata{},
+			errAssertion:    testutil.IsError(slippi.ErrDecodingField),
+		},
 	}
 
 	for name, testCase := range testCases {
@@ -71,9 +77,7 @@ func TestUnmarshalUBJSON(t *testing.T) {
 			require.NoError(t, err)
 
 			actual := slippi.Metadata{}
-			if er := ubjson.Unmarshal(tcBytes, &actual); err != nil {
-				log.Fatal(er)
-			}
+			err = ubjson.Unmarshal(tcBytes, &actual)
 
 			tc.errAssertion(t, err)
 

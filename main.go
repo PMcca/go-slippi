@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/jmank88/ubjson"
@@ -9,7 +10,7 @@ import (
 	"os"
 )
 
-const asdasd = "7B690773746172744174536915323032322D30382D32385431353A35313A31335A5569096C6173744672616D65490BB86907706C61796572737B6901307B69056E616D65737B69076E6574706C617953690C4E6574706C6179204E616D656904636F646553690854455354233030317D690A636861726163746572737B690137490AF06902313955C87D7D6901317B69056E616D65737B69076E6574706C617953690E4E6574706C6179204E616D6520326904636F646553690854455354233030327D690A636861726163746572737B690133490BB87D7D7D7D"
+const asdasd = "7B690773746172744174536915323032322D30382D32385431353A35313A31335A5569096C6173744672616D6553690B6E6F7420616E20696E74216907706C61796572737B6901307B69056E616D65737B69076E6574706C617953690C4E6574706C6179204E616D656904636F646553690854455354233030317D690A636861726163746572737B690137490AF06902313955C87D7D6901317B69056E616D65737B69076E6574706C617953690E4E6574706C6179204E616D6520326904636F646553690854455354233030327D690A636861726163746572737B690133490BB87D7D7D7D"
 
 func checkErr(err error) {
 	if err != nil {
@@ -18,26 +19,26 @@ func checkErr(err error) {
 }
 
 func ba() {
-	gloo, err := os.Open("valid-meta.ubj")
-	checkErr(err)
-
-	defer gloo.Close()
-
-	b, err := io.ReadAll(gloo)
-	checkErr(err)
-	m := slippi.Metadata{}
-	if err = ubjson.Unmarshal(b, &m); err != nil {
+	//gloo, err := os.Open("valid-meta.ubj")
+	//checkErr(err)
+	//
+	//defer gloo.Close()
+	//
+	//b, err := io.ReadAll(gloo)
+	//checkErr(err)
+	//m := slippi.Metadata{}
+	//if err = ubjson.Unmarshal(b, &m); err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//fmt.Println(m)
+	as, err := hex.DecodeString(asdasd)
+	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println(m)
-	//as, err := hex.DecodeString(asdasd)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//if err := os.WriteFile("valid-meta.ubj", as, 0644); err != nil {
-	//	log.Fatal(err)
-	//}
+	if err := os.WriteFile("invalid-lastFrame.ubj", as, 0644); err != nil {
+		log.Fatal(err)
+	}
 
 	//reader := bytes.NewReader(as)
 	//dec := ubjson.NewDecoder(reader)

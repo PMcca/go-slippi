@@ -2,9 +2,11 @@ package slippi
 
 import (
 	"fmt"
+	"github.com/PMcca/go-slippi/internal/sentinel"
 	"github.com/PMcca/go-slippi/slippi/melee"
 	"github.com/jmank88/ubjson"
 	"github.com/pkg/errors"
+	"log"
 	"strconv"
 )
 
@@ -44,6 +46,8 @@ func (m *Metadata) MarshalUBJSON(e *ubjson.Encoder) error {
 }
 
 func (m *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
+	tempM := *m
+
 	o, err := d.Object()
 	if err != nil {
 		return err
@@ -59,19 +63,20 @@ func (m *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 		case "startAt":
 			s, err := o.DecodeString()
 			if err != nil {
-				return errors.Wrap(err, "could not decode string for startAt")
+				return sentinel.Wrap(err, ErrDecodingField)
 			}
-			m.StartAt = s
+			tempM.StartAt = s
 
 		case "lastFrame":
 			l, err := o.DecodeInt()
 			if err != nil {
-				return errors.Wrap(err, "could not decode string for lastFrame")
+				return sentinel.Wrap(err, ErrDecodingField)
+				//return errors.Wrap(err, "could not decode string for lastFrame")
 			}
-			m.LastFrame = l
+			tempM.LastFrame = l
 
 		case "players":
-			err := o.DecodeObject(parsePlayers(m))
+			err := o.DecodeObject(parsePlayers(&tempM))
 			if err != nil {
 				return errors.Wrap(err, "could not parse players")
 			}
@@ -86,13 +91,14 @@ func (m *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 			if err != nil {
 				return errors.Wrap(err, "could not decode string for playedOn")
 			}
-			m.PlayedOn = s
+			tempM.PlayedOn = s
 
 		default:
-			fmt.Printf("k was %s\n", k)
+			log.Printf("Unexpected key in meta: %s\n", k)
 		}
 	}
 
+	*m = tempM
 	return nil
 }
 
