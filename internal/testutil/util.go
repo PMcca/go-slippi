@@ -16,6 +16,7 @@ func ReadUBJSONFile(name string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer f.Close()
 
 	b, err := io.ReadAll(f)
 	if err != nil {

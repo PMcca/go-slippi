@@ -40,5 +40,5 @@ func WithMessage(original, sentinel error, message string) error {
 
 // WithMessagef wraps an error with a given sentinel, followed by some formatted message.
 func WithMessagef(original error, sentinel error, format string, args ...interface{}) error {
-	return WithMessage(original, sentinel, fmt.Sprintf(format, args))
+	return WithMessage(original, sentinel, fmt.Sprintf(format, args...))
 }

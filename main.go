@@ -2,6 +2,9 @@ package main
 
 import (
 	"encoding/hex"
+	"fmt"
+	"github.com/PMcca/go-slippi/slippi"
+	"github.com/jmank88/ubjson"
 	"log"
 	"os"
 )
@@ -20,5 +23,22 @@ func ba() {
 }
 
 func main() {
-	ba()
+	dec := ac()
+	meta := slippi.Metadata{}
+	if err := dec.Decode(&meta); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(meta)
+	//ba()
+}
+
+func ac() *ubjson.Decoder {
+	f, err := os.Open("valid-meta.ubj")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	return ubjson.NewDecoder(f)
+
 }
