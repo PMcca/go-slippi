@@ -42,7 +42,7 @@ func (m *Metadata) UBJSONType() ubjson.Marker {
 
 func (m *Metadata) MarshalUBJSON(e *ubjson.Encoder) error {
 	//TODO: Support encoding later?
-	return nil
+	return errors.New("marshalling meta structs is currently unsupported")
 }
 
 func (m *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
@@ -63,28 +63,22 @@ func (m *Metadata) UnmarshalUBJSON(d *ubjson.Decoder) error {
 		case "startAt":
 			s, err := o.DecodeString()
 			if err != nil {
-				return sentinel.Wrap(err, ErrDecodingField)
+				return sentinel.Wrap(err, ErrDecodingStartAt)
 			}
 			tempM.StartAt = s
 
 		case "lastFrame":
 			l, err := o.DecodeInt()
 			if err != nil {
-				return sentinel.Wrap(err, ErrDecodingField)
-				//return errors.Wrap(err, "could not decode string for lastFrame")
+				return sentinel.Wrap(err, ErrDecodingLastFrame)
 			}
 			tempM.LastFrame = l
 
 		case "players":
 			err := o.DecodeObject(parsePlayers(&tempM))
 			if err != nil {
-				return errors.Wrap(err, "could not parse players")
+				return sentinel.Wrap(err, ErrDecodingPlayers)
 			}
-			//players := make(map[string]interface{})
-			//err = o.Decode(&players)
-			//if err != nil {
-			//	return errors.Wrap(err, "could not decode players into map")
-			//}
 
 		case "playedOn":
 			s, err := o.DecodeString()

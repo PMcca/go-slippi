@@ -35,7 +35,5 @@ func IsError(e error) require.ErrorAssertionFunc {
 				tt.Logf("Incorrect error type for error '%s'. Expected %T, got %T", err, e, err)
 			}
 		}
-		//assert.IsType(t, e, err)
-
 	}
 }

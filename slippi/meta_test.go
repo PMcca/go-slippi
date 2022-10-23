@@ -63,7 +63,12 @@ func TestUnmarshalUBJSON(t *testing.T) {
 		"InvalidFieldTypeReturnsError": {
 			fixtureFilename: "invalid-lastFrame.ubj",
 			expected:        slippi.Metadata{},
-			errAssertion:    testutil.IsError(slippi.ErrDecodingField),
+			errAssertion:    testutil.IsError(slippi.ErrDecodingLastFrame),
+		},
+		"InvalidPlayersReturnsError": {
+			fixtureFilename: "invalid-players.ubj",
+			expected:        slippi.Metadata{},
+			errAssertion:    testutil.IsError(slippi.ErrDecodingPlayers),
 		},
 	}
 
