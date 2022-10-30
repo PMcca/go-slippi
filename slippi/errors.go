@@ -4,6 +4,9 @@ const (
 	ErrDecodingStartAt Error = iota
 	ErrDecodingLastFrame
 	ErrDecodingPlayers
+	ErrEmptyFilePath
+	ErrOpeningFile
+	ErrParsingMeta
 )
 
 type Error uint
@@ -17,6 +20,12 @@ func (e Error) Error() string {
 		return "failed to decode lastFrame"
 	case ErrDecodingPlayers:
 		return "failed to decode players"
+	case ErrEmptyFilePath:
+		return "file path is empty"
+	case ErrOpeningFile:
+		return "failed to open file"
+	case ErrParsingMeta:
+		return "failed to parse metadata"
 	default:
 		return "unknown error"
 	}

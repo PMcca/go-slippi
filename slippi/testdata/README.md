@@ -111,3 +111,71 @@
     [}]
 [}]
 ```
+
+---
+
+## `invalid-meta.ubj` contents:
+
+### JSON:
+```json
+{
+  "metadata": { 
+        "someFakeField": 123
+    }
+}
+```
+
+### UBJSON:
+```
+[{]
+    [i][8][metadata][{]
+        [i][13][someFakeField][i][123]
+    [}]
+[}]
+```
+
+---
+
+## `valid-meta-1-player.ubj` contents:
+
+### JSON:
+```json
+{
+    "metadata": {
+        "startAt": "2022-08-28T15:51:13ZU",
+        "lastFrame": 3000,
+        "players": {
+            "0": {
+                "names": {
+                    "netplay": "name",
+                    "code": "TEST#001"
+                },
+                "characters": {
+                    "0": 3000
+                }
+            }
+        }
+    }
+}
+```
+
+### UBJSON:
+```
+[{]
+    [i][8][metadata][{]
+        [i][7][startAt][S][i][21][2022-08-28T15:51:13ZU]
+        [i][9][lastFrame][I][3000]
+        [i][7][players][{]
+            [i][1][0][{]
+                [i][5][names][{]
+                    [i][7][netplay][S][i][4][name]
+                    [i][4][code][S][i][8][TEST#001]
+                [}]
+                [i][10][characters][{]
+                    [i][1][0][I][3000]
+                [}]
+            [}]
+        [}]
+    [}]
+[}]
+```

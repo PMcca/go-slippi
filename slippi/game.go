@@ -7,11 +7,7 @@ type Game struct {
 	//Meta map[string]interface{} `ubjson:"metadata"`
 }
 
-type Game2 struct {
-	FieldA string `ubjson:"fielda"`
-	FieldB string
-}
-
-type Game3 struct {
-	FieldC string `ubjson:"fielda"`
+// metaOnlyGame is an internal type to omit parsing the 'raw' element and only parse the 'metadata' fields.
+type metaOnlyGame struct {
+	Meta Metadata `ubjson:"metadata"`
 }
