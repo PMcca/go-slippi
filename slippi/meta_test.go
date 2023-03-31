@@ -85,7 +85,6 @@ func TestUnmarshalUBJSON(t *testing.T) {
 			err = ubjson.Unmarshal(tcBytes, &actual)
 
 			tc.errAssertion(t, err)
-
 			require.Equal(t, tc.expected, actual)
 
 		})

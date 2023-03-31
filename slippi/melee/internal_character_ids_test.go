@@ -7,7 +7,6 @@ import (
 )
 
 func TestInternalCharacterID_String(t *testing.T) {
-
 	internalCharacterIDs := map[melee.InternalCharacterID]string{
 		0:  "Mario",
 		1:  "Fox",
@@ -33,7 +32,7 @@ func TestInternalCharacterID_String(t *testing.T) {
 		21: "Dr. Mario",
 		22: "Falco",
 		23: "Pichu",
-		24: "Game & Watch",
+		24: "Mr. Game & Watch",
 		25: "Ganondorf",
 		26: "Roy",
 		27: "Master Hand",

@@ -39,76 +39,47 @@ const (
 	Sandbag
 )
 
+var characterStrings = map[InternalCharacterID]string{
+	Mario:           "Mario",
+	Fox:             "Fox",
+	CaptainFalcon:   "Captain Falcon",
+	DonkeyKong:      "Donkey Kong",
+	Kirby:           "Kirby",
+	Bowser:          "Bowser",
+	Link:            "Link",
+	Sheik:           "Sheik",
+	Ness:            "Ness",
+	Peach:           "Peach",
+	Popo:            "Popo",
+	Nana:            "Nana",
+	Pikachu:         "Pikachu",
+	Samus:           "Samus",
+	Yoshi:           "Yoshi",
+	Jigglypuff:      "Jigglypuff",
+	Mewtwo:          "Mewtwo",
+	Luigi:           "Luigi",
+	Marth:           "Marth",
+	Zelda:           "Zelda",
+	YoungLink:       "Young Link",
+	DrMario:         "Dr. Mario",
+	Falco:           "Falco",
+	Pichu:           "Pichu",
+	GameAndWatch:    "Mr. Game & Watch",
+	Ganondorf:       "Ganondorf",
+	Roy:             "Roy",
+	MasterHand:      "Master Hand",
+	CrazyHand:       "Crazy Hand",
+	WireFrameMale:   "WireFrame Male",
+	WireFrameFemale: "WireFrame Female",
+	GigaBowser:      "Giga Bowser",
+	Sandbag:         "Sandbag",
+}
+
 // String returns the character name of the respective internal character ID
 func (c InternalCharacterID) String() string {
-	switch c {
-	case Mario:
-		return "Mario"
-	case Fox:
-		return "Fox"
-	case CaptainFalcon:
-		return "Captain Falcon"
-	case DonkeyKong:
-		return "Donkey Kong"
-	case Kirby:
-		return "Kirby"
-	case Bowser:
-		return "Bowser"
-	case Link:
-		return "Link"
-	case Sheik:
-		return "Sheik"
-	case Ness:
-		return "Ness"
-	case Peach:
-		return "Peach"
-	case Popo:
-		return "Popo"
-	case Nana:
-		return "Nana"
-	case Pikachu:
-		return "Pikachu"
-	case Samus:
-		return "Samus"
-	case Yoshi:
-		return "Yoshi"
-	case Jigglypuff:
-		return "Jigglypuff"
-	case Mewtwo:
-		return "Mewtwo"
-	case Luigi:
-		return "Luigi"
-	case Marth:
-		return "Marth"
-	case Zelda:
-		return "Zelda"
-	case YoungLink:
-		return "Young Link"
-	case DrMario:
-		return "Dr. Mario"
-	case Falco:
-		return "Falco"
-	case Pichu:
-		return "Pichu"
-	case GameAndWatch:
-		return "Game & Watch"
-	case Ganondorf:
-		return "Ganondorf"
-	case Roy:
-		return "Roy"
-	case MasterHand:
-		return "Master Hand"
-	case CrazyHand:
-		return "Crazy Hand"
-	case WireFrameMale:
-		return "WireFrame Male"
-	case WireFrameFemale:
-		return "WireFrame Female"
-	case GigaBowser:
-		return "Giga Bowser"
-	case Sandbag:
-		return "Sandbag"
-	default:
+	n, ok := characterStrings[c]
+	if !ok {
 		return "unknown character"
 	}
+	return n
 }
