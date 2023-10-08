@@ -13,44 +13,61 @@ func TestParseMeta(t *testing.T) {
 
 	testCases := map[string]struct {
 		filePath     string
-		expected     *slippi.Metadata
+		expected     slippi.Metadata
 		errAssertion require.ErrorAssertionFunc
 	}{
 		"EmptyFilePathReturnsError": {
 			filePath:     "",
-			expected:     nil,
+			expected:     slippi.Metadata{},
 			errAssertion: testutil.IsError(slippi.ErrEmptyFilePath),
 		},
 		"ErrorReadingFileReturnsError": {
-			filePath:     "some-non-existent-file-iodsjfoisdnhgs.slp",
-			expected:     nil,
-			errAssertion: testutil.IsError(slippi.ErrOpeningFile),
+			filePath:     "some-non-existent-file.slp",
+			expected:     slippi.Metadata{},
+			errAssertion: testutil.IsError(slippi.ErrReadingFile),
 		},
 		"ErrorParsingMetaReturnsError": {
-			filePath:     "testdata/invalid-meta.ubj",
-			expected:     nil,
+			filePath:     "test/replays/invalid-ubjson.ubj",
+			expected:     slippi.Metadata{},
 			errAssertion: testutil.IsError(slippi.ErrParsingMeta),
 		},
 		"ParsesAndReturnsMeta": {
-			filePath: "testdata/valid-meta-1-player.ubj",
-			expected: &slippi.Metadata{
-				StartAt:   "2022-08-28T15:51:13ZU",
-				LastFrame: 3000,
-				Players: []*slippi.Player{
-					{
-						Name: slippi.Names{
-							Name:       "name",
-							SlippiCode: "TEST#001",
+			filePath: "test/replays/metadata.slp",
+			//filePath: "testdata/valid-meta-1-player.ubj",
+			expected: slippi.Metadata{
+				StartAt:   "2022-12-02T18:09:00Z",
+				LastFrame: 2011,
+				Players: slippi.Players{
+					Port1: slippi.Player{
+						Names: slippi.Names{
+							Name:       "Smasher",
+							SlippiCode: "SMSH#123",
 						},
-						Port: 0,
-						Characters: []slippi.Character{
+						Characters: slippi.Characters{
+							{
+								CharacterID:  melee.Zelda,
+								FramesPlayed: 532,
+							},
+							{
+								CharacterID:  melee.Sheik,
+								FramesPlayed: 1603,
+							},
+						},
+					},
+					Port2: slippi.Player{
+						Names: slippi.Names{
+							Name:       "I Love Slippi!",
+							SlippiCode: "SLIP#987",
+						},
+						Characters: slippi.Characters{
 							{
 								CharacterID:  melee.Mario,
-								FramesPlayed: 3000,
+								FramesPlayed: 2135,
 							},
 						},
 					},
 				},
+				PlayedOn: "dolphin",
 			},
 			errAssertion: require.NoError,
 		},
