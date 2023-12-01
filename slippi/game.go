@@ -1,8 +1,68 @@
 package slippi
 
+import (
+	"fmt"
+	"github.com/PMcca/go-slippi/slippi/melee"
+)
+
+type TimerType int
+
+const (
+	NoTimer         TimerType = 0
+	TimerDecreasing           = 2
+	TimerIncreasing           = 3
+)
+
+type GameMode int
+
+const (
+	GameModeTime  = 0
+	GameModeStock = 1
+	GameModeCoin  = 2
+	GameModeBonus = 3
+)
+
+type ItemSpawnBehaviour int8
+
+const (
+	ItemSpawnOff      = -1
+	ItemSpawnVeryLow  = 0
+	ItemSpawnLow      = 1
+	ItemSpawnMed      = 2
+	ItemSpawnHigh     = 3
+	ItemSpawnVeryHigh = 4
+)
+
+type GameStart struct {
+	SlippiVersion      string
+	TimerType          TimerType
+	GameMode           GameMode
+	IsFriendlyFire     bool
+	IsTeams            bool
+	ItemSpawnBehaviour ItemSpawnBehaviour
+	Stage              melee.StageID
+	TimerStartSeconds  int
+}
+
+type GameEnd struct {
+}
+
+type Frame struct {
+}
+
+// Data holds the parsed game data of the parsed .slp file.
+type Data struct {
+}
+
+func (r Data) UnmarshalUBJSON(bytes []byte) error {
+	fmt.Println("HELLO I AM IN RAW")
+	return nil
+}
+
 // Game represents a parsed .slp game.
 type Game struct {
-	Raw  []byte   `ubjson:"raw"`
+	Raw Data `ubjson:"raw"`
+	//Data  []byte   `ubjson:"raw"`
 	Meta Metadata `ubjson:"metadata"`
 }
 

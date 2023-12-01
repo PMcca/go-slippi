@@ -1,6 +1,7 @@
 package slippi_test
 
 import (
+	"fmt"
 	"github.com/PMcca/go-slippi/internal/testutil"
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/PMcca/go-slippi/slippi/melee"
@@ -86,4 +87,10 @@ func TestParseMeta(t *testing.T) {
 
 		})
 	}
+}
+
+func TestParse(t *testing.T) {
+	g, err := slippi.ParseGame("test/replays/metadata.slp")
+	require.NoError(t, err)
+	fmt.Println(g)
 }
