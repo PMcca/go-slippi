@@ -9,25 +9,25 @@ import (
 
 // Metadata represents the parsed metadata element from a .slp file.
 type Metadata struct {
-	StartAt   string  `ubjson:"startAt"`
-	LastFrame int     `ubjson:"lastFrame"`
-	Players   Players `ubjson:"players"`
-	PlayedOn  string  `ubjson:"playedOn"`
+	StartAt   string      `ubjson:"startAt"`
+	LastFrame int         `ubjson:"lastFrame"`
+	Players   PlayersMeta `ubjson:"players"`
+	PlayedOn  string      `ubjson:"playedOn"`
 }
 
-// Player is a single player in the game including their Slippi display name or in-game name (dependent on online/local).
-type Player struct {
+// PlayerMeta is a single player in the game including their Slippi display name or in-game name (dependent on online/local).
+type PlayerMeta struct {
 	Names      Names      `ubjson:"names"`
 	Characters Characters `ubjson:"characters"`
 }
 
-// Players holds a Player object for each controller port. The corresponding object for a given port will be empty if
+// PlayersMeta holds a PlayerMeta object for each controller port. The corresponding object for a given port will be empty if
 // the port was not used during the game.
-type Players struct {
-	Port1 Player `ubjson:"0"`
-	Port2 Player `ubjson:"1"`
-	Port3 Player `ubjson:"2"`
-	Port4 Player `ubjson:"3"`
+type PlayersMeta struct {
+	Port1 PlayerMeta `ubjson:"0"`
+	Port2 PlayerMeta `ubjson:"1"`
+	Port3 PlayerMeta `ubjson:"2"`
+	Port4 PlayerMeta `ubjson:"3"`
 }
 
 // Character is the Melee character that was present in the match.

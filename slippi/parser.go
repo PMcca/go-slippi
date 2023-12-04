@@ -8,18 +8,14 @@ import (
 
 // ParseGame reads the .slp file given by filePath and returns the decoded game.
 func ParseGame(filePath string) (Game, error) {
-	if filePath == "" {
-		return Game{}, ErrEmptyFilePath
-	}
-
-	b, err := os.ReadFile(filePath)
+	b, err := readFile(filePath)
 	if err != nil {
-		return Game{}, sentinel.WithMessagef(err, ErrReadingFile, "filePath: %s", filePath)
+		return Game{}, err
 	}
 
 	g := Game{}
 	if err := ubjson.Unmarshal(b, &g); err != nil {
-		return Game{}, sentinel.WithMessagef(err, ErrParsingMeta, "filePath: %s", filePath)
+		return Game{}, sentinel.WithMessagef(err, ErrParsingGame, "filePath: %s", filePath)
 	}
 
 	return g, nil
@@ -27,13 +23,9 @@ func ParseGame(filePath string) (Game, error) {
 
 // ParseMeta reads the .slp file given by filePath and returns the decoded metadata fields.
 func ParseMeta(filePath string) (Metadata, error) {
-	if filePath == "" {
-		return Metadata{}, ErrEmptyFilePath
-	}
-
-	b, err := os.ReadFile(filePath)
+	b, err := readFile(filePath)
 	if err != nil {
-		return Metadata{}, sentinel.WithMessagef(err, ErrReadingFile, "filePath: %s", filePath)
+		return Metadata{}, err
 	}
 
 	m := metaOnlyGame{}
@@ -42,4 +34,18 @@ func ParseMeta(filePath string) (Metadata, error) {
 	}
 
 	return m.Meta, nil
+}
+
+// readFile reads & returns the bytes of the given .slp file.
+func readFile(filePath string) ([]byte, error) {
+	if filePath == "" {
+		return nil, ErrEmptyFilePath
+	}
+
+	b, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, sentinel.WithMessagef(err, ErrReadingFile, "filePath: %s", filePath)
+	}
+
+	return b, nil
 }

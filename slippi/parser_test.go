@@ -9,6 +9,46 @@ import (
 	"testing"
 )
 
+func TestParseGame(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		filePath     string
+		expected     slippi.Game
+		errAssertion require.ErrorAssertionFunc
+	}{
+		"EmptyFilePathReturnsError": {
+			filePath:     "",
+			expected:     slippi.Game{},
+			errAssertion: testutil.IsError(slippi.ErrEmptyFilePath),
+		},
+		"ErrorReadingFileReturnsError": {
+			filePath:     "some-non-existent-file.slp",
+			expected:     slippi.Game{},
+			errAssertion: testutil.IsError(slippi.ErrReadingFile),
+		},
+		"ErrorParsingMetaReturnsError": {
+			filePath:     "test/replays/invalid-ubjson.ubj",
+			expected:     slippi.Game{},
+			errAssertion: testutil.IsError(slippi.ErrParsingGame),
+		},
+	}
+
+	for name, testCase := range testCases {
+		tc := testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			actual, err := slippi.ParseGame(tc.filePath)
+
+			tc.errAssertion(t, err)
+			require.Equal(t, tc.expected, actual)
+
+		})
+	}
+}
+
 func TestParseMeta(t *testing.T) {
 	t.Parallel()
 
@@ -38,8 +78,8 @@ func TestParseMeta(t *testing.T) {
 			expected: slippi.Metadata{
 				StartAt:   "2022-12-02T18:09:00Z",
 				LastFrame: 2011,
-				Players: slippi.Players{
-					Port1: slippi.Player{
+				Players: slippi.PlayersMeta{
+					Port1: slippi.PlayerMeta{
 						Names: slippi.Names{
 							Name:       "Smasher",
 							SlippiCode: "SMSH#123",
@@ -55,7 +95,7 @@ func TestParseMeta(t *testing.T) {
 							},
 						},
 					},
-					Port2: slippi.Player{
+					Port2: slippi.PlayerMeta{
 						Names: slippi.Names{
 							Name:       "I Love Slippi!",
 							SlippiCode: "SLIP#987",

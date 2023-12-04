@@ -3,6 +3,7 @@ package slippi
 const (
 	ErrEmptyFilePath Error = iota
 	ErrReadingFile
+	ErrParsingGame
 	ErrParsingMeta
 )
 
@@ -15,6 +16,8 @@ func (e Error) Error() string {
 		return "file path is empty"
 	case ErrReadingFile:
 		return "failed to read file"
+	case ErrParsingGame:
+		return "failed to parse game"
 	case ErrParsingMeta:
 		return "failed to parse metadata"
 	default:
