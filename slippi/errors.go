@@ -5,6 +5,7 @@ const (
 	ErrReadingFile
 	ErrParsingGame
 	ErrParsingMeta
+	ErrInvalidRawStart
 )
 
 type Error uint
@@ -20,6 +21,8 @@ func (e Error) Error() string {
 		return "failed to parse game"
 	case ErrParsingMeta:
 		return "failed to parse metadata"
+	case ErrInvalidRawStart:
+		return "unexpected beginning of raw array"
 	default:
 		return "unknown error"
 	}

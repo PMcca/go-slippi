@@ -1,6 +1,8 @@
 package slippi
 
 import (
+	"bytes"
+	"fmt"
 	"github.com/PMcca/go-slippi/slippi/melee"
 )
 
@@ -105,6 +107,18 @@ type Data struct {
 	GameStart GameStart
 }
 
-func (r *Data) UnmarshalUBJSON(bytes []byte) error {
+// UnmarshalUBJSON takes the 'raw' array from the .slp file and parses it into a Game.Data struct.
+func (r *Data) UnmarshalUBJSON(b []byte) error {
+	// Beginning of raw array should always be '$U#l'.
+	if !bytes.Equal(b[0:4], []byte("$U#l")) {
+		return fmt.Errorf("%w:expected '$U#l', found %s", ErrInvalidRawStart, b[0:4])
+	}
+
+	decoder := decoder{
+		data:   b,
+		offset: 4, // Start reading from length of overall array i.e. after 'l'.
+	}
+
+	fmt.Println(decoder.read())
 	return nil
 }
