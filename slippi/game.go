@@ -2,8 +2,7 @@ package slippi
 
 // Game represents a parsed .slp game.
 type Game struct {
-	Raw Data `ubjson:"raw"`
-	//Data  []byte   `ubjson:"raw"`
+	Data Data     `ubjson:"raw"`
 	Meta Metadata `ubjson:"metadata"`
 }
 

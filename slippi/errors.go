@@ -6,6 +6,7 @@ const (
 	ErrParsingGame
 	ErrParsingMeta
 	ErrInvalidRawStart
+	ErrEventPayloadsNotFound
 )
 
 type Error uint
@@ -23,6 +24,8 @@ func (e Error) Error() string {
 		return "failed to parse metadata"
 	case ErrInvalidRawStart:
 		return "unexpected beginning of raw array"
+	case ErrEventPayloadsNotFound:
+		return "event payloads not found in raw"
 	default:
 		return "unknown error"
 	}

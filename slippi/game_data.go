@@ -108,17 +108,25 @@ type Data struct {
 }
 
 // UnmarshalUBJSON takes the 'raw' array from the .slp file and parses it into a Game.Data struct.
-func (r *Data) UnmarshalUBJSON(b []byte) error {
+func (d *Data) UnmarshalUBJSON(b []byte) error {
 	// Beginning of raw array should always be '$U#l'.
 	if !bytes.Equal(b[0:4], []byte("$U#l")) {
 		return fmt.Errorf("%w:expected '$U#l', found %s", ErrInvalidRawStart, b[0:4])
 	}
 
-	decoder := decoder{
+	dec := decoder{
 		data:   b,
 		offset: 4, // Start reading from length of overall array i.e. after 'l'.
 	}
 
-	fmt.Println(decoder.read())
+	totalSize := dec.readInt32()
+	// Now expecting EventPayloads event
+	if dec.read() != 0x35 {
+		return ErrEventPayloadsNotFound
+	}
+	payloads := parseEventPayloads(&dec)
+	fmt.Println(totalSize)
+	fmt.Println(payloads)
+
 	return nil
 }
