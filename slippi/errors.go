@@ -7,6 +7,8 @@ const (
 	ErrParsingMeta
 	ErrInvalidRawStart
 	ErrEventPayloadsNotFound
+	ErrInvalidNumberOfCommands
+	ErrUnknownEventInEventSizes
 )
 
 type Error uint
@@ -26,6 +28,10 @@ func (e Error) Error() string {
 		return "unexpected beginning of raw array"
 	case ErrEventPayloadsNotFound:
 		return "event payloads not found in raw"
+	case ErrInvalidNumberOfCommands:
+		return "invalid number of commands in event payloads, must be divisible by 3"
+	case ErrUnknownEventInEventSizes:
+		return "unknown event in event payload sizes"
 	default:
 		return "unknown error"
 	}

@@ -115,18 +115,36 @@ func (d *Data) UnmarshalUBJSON(b []byte) error {
 	}
 
 	dec := decoder{
-		data:   b,
-		offset: 4, // Start reading from length of overall array i.e. after 'l'.
+		data: b[8:], // Skip $U#l and 4 bytes for length; size of array is used for bounds checking.
 	}
 
-	totalSize := dec.readInt32()
-	// Now expecting EventPayloads event
-	if dec.read() != 0x35 {
-		return ErrEventPayloadsNotFound
+	eventSizes, err := parseEventPayloads(b[8:]) // Skip $U#l and 4 bytes for length.
+	if err != nil {
+		return err
 	}
-	payloads := parseEventPayloads(&dec)
-	fmt.Println(totalSize)
-	fmt.Println(payloads)
+
+	// Main event parsing loop
+	for i := 0; i < len(dec.data); i++ {
+		eventCode := eventType(dec.read(0x0))
+		eventSize, ok := eventSizes[eventCode]
+		if !ok {
+			return fmt.Errorf("%w:eventCode %d", ErrUnknownEventInEventSizes, eventCode)
+		}
+
+		var err error
+		switch eventCode {
+		case eventPayloadsEvent:
+			break // Already parsed, so skip.
+		case eventGameStart:
+			err = parseGameStart(eventSize, &dec, d)
+		}
+		if err != nil {
+			return fmt.Errorf("%w:failed to parse event %d", err, eventCode)
+		}
+
+		dec.data = dec.data[eventSize+1:] // Update the window of data, skipping the # of bytes read + the command byte.
+	}
+	fmt.Println(eventSizes)
 
 	return nil
 }

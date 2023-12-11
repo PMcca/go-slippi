@@ -1,10 +1,13 @@
 package slippi
 
 import (
+	"github.com/PMcca/go-slippi/internal/logging"
 	"github.com/PMcca/go-slippi/internal/sentinel"
 	"github.com/toitware/ubjson"
 	"os"
 )
+
+var log = logging.NewLogger()
 
 // ParseGame reads the .slp file given by filePath and returns the decoded game.
 func ParseGame(filePath string) (Game, error) {
