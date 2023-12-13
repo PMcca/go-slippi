@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/PMcca/go-slippi/slippi/melee"
+	"golang.org/x/text/encoding/unicode"
 )
 
 // eventType is a type representing the event types in a raw array.
@@ -49,23 +50,18 @@ func parseEventPayloads(d []byte) (map[eventType]int, error) {
 }
 
 // parseGameStart parses a GameStart event and populates the given Data struct with its contents.
-func parseGameStart(eventSize int, dec *decoder, data *Data) error {
+func parseGameStart(dec *decoder, data *Data) error {
 	slippiVersion := fmt.Sprintf("%d.%d.%d",
 		dec.read(0x1),
 		dec.read(0x2),
 		dec.read(0x3),
 	)
-	timerType := TimerType(dec.readWithBitmask(0x5, 0x03))
-	inGameMode := InGameMode(dec.readWithBitmask(0x5, 0xe0)) >> 5
 
 	var isFriendlyFire bool
 	if dec.readWithBitmask(0x6, 0x01) > 0 {
 		isFriendlyFire = true
 	}
-	isTeams := dec.readBool(0xd)
-	itemSpawnBehaviour := ItemSpawnBehaviour(dec.read(0x10))
-	stageID := melee.StageID(dec.readInt16(0x13))
-	timerStartSeconds := dec.readInt32(0x15)
+
 	enabledItems := melee.GetEnabledItems(
 		dec.read(0x16),
 		dec.read(0x17),
@@ -73,16 +69,40 @@ func parseGameStart(eventSize int, dec *decoder, data *Data) error {
 		dec.read(0x19),
 		dec.read(0x20))
 
+	players := make([]Player, 4)
+	for i := 0; i < 4; i++ {
+		p, err := parsePlayer(i, dec)
+		if err != nil {
+			return fmt.Errorf("%w:failed to parse player in port %d", err, i)
+		}
+		players[i] = p
+	}
+
+	matchID, err := parseGameStartString(0x2be, 51, dec, unicode.UTF8.NewDecoder(), false)
+	if err != nil {
+		return fmt.Errorf("%w:failed to parse matchID", err)
+	}
+
 	data.GameStart = GameStart{
 		SlippiVersion:      slippiVersion,
-		TimerType:          timerType,
-		InGameMode:         inGameMode,
+		TimerType:          TimerType(dec.readWithBitmask(0x5, 0x03)),
+		InGameMode:         InGameMode(dec.readWithBitmask(0x5, 0xe0)) >> 5,
 		IsFriendlyFire:     isFriendlyFire,
-		IsTeams:            isTeams,
-		ItemSpawnBehaviour: itemSpawnBehaviour,
-		Stage:              stageID,
-		TimerStartSeconds:  timerStartSeconds,
+		IsTeams:            dec.readBool(0xd),
+		ItemSpawnBehaviour: ItemSpawnBehaviour(dec.read(0x10)),
+		Stage:              melee.Stage(dec.readInt16(0x13)),
+		TimerStartSeconds:  dec.readInt32(0x15),
 		EnabledItems:       enabledItems,
+		Players:            players,
+		Scene:              dec.read(0x1a3),
+		GameMode:           GameMode(dec.read(0x1a4)),
+		Language:           Language(dec.read(0x2bd)),
+		RandomSeed:         dec.readInt32(0x13d),
+		IsPAL:              dec.readBool(0x1a1),
+		IsFrozenPS:         dec.readBool(0x1a2),
+		MatchID:            matchID,
+		GameNumber:         dec.readInt32(0x2f1),
+		TiebreakerNumber:   dec.readInt32(0x2f5),
 	}
 	return nil
 }

@@ -131,6 +131,8 @@ func TestParseMeta(t *testing.T) {
 
 func TestParse(t *testing.T) {
 	//t.SkipNow()
+	//g, err := slippi.ParseGame("test/replays/unranked_game1.slp")
+	//g, err := slippi.ParseGame("test/replays/ranked_game1_tiebreak.slp")
 	g, err := slippi.ParseGame("test/replays/20221202T180900.slp")
 	//g, err := slippi.ParseGame("test/replays/metadata.slp")
 	require.NoError(t, err)

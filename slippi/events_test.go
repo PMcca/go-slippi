@@ -82,7 +82,7 @@ func Test_parseGameStart(t *testing.T) {
 			}
 
 			actual := Data{}
-			err := parseGameStart(len(tc.input), &d, &actual)
+			err := parseGameStart(&d, &actual)
 
 			tc.errAssertion(t, err)
 			require.Equal(t, tc.expected.GameStart, actual.GameStart)
