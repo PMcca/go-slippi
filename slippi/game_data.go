@@ -90,6 +90,7 @@ type GameStart struct {
 	ItemSpawnBehaviour ItemSpawnBehaviour
 	Stage              melee.StageID
 	TimerStartSeconds  int
+	EnabledItems       []melee.Item
 	Players            []Player
 	Scene              Scene
 	GameMode           int // TODO figure this out

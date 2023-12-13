@@ -3,6 +3,7 @@ package slippi
 import (
 	"encoding/binary"
 	"fmt"
+	"github.com/PMcca/go-slippi/slippi/melee"
 )
 
 // eventType is a type representing the event types in a raw array.
@@ -54,16 +55,34 @@ func parseGameStart(eventSize int, dec *decoder, data *Data) error {
 		dec.read(0x2),
 		dec.read(0x3),
 	)
+	timerType := TimerType(dec.readWithBitmask(0x5, 0x03))
+	inGameMode := InGameMode(dec.readWithBitmask(0x5, 0xe0)) >> 5
 
-	//timerType := dec.readWithBitmask(0x5, 0x03)
-	//inGameMode := dec.readWithBitmask(0x5, 0xe0)
-	//
-	//var isFriendlyFire bool
-	//if dec.readWithBitmask(0x6, 0x01) == 1 {
-	//	isFriendlyFire = true
-	//}
+	var isFriendlyFire bool
+	if dec.readWithBitmask(0x6, 0x01) > 0 {
+		isFriendlyFire = true
+	}
+	isTeams := dec.readBool(0xd)
+	itemSpawnBehaviour := ItemSpawnBehaviour(dec.read(0x10))
+	stageID := melee.StageID(dec.readInt16(0x13))
+	timerStartSeconds := dec.readInt32(0x15)
+	enabledItems := melee.GetEnabledItems(
+		dec.read(0x16),
+		dec.read(0x17),
+		dec.read(0x18),
+		dec.read(0x19),
+		dec.read(0x20))
 
-	fmt.Println(slippiVersion)
-	//timerType := dec.read() & 0x03
+	data.GameStart = GameStart{
+		SlippiVersion:      slippiVersion,
+		TimerType:          timerType,
+		InGameMode:         inGameMode,
+		IsFriendlyFire:     isFriendlyFire,
+		IsTeams:            isTeams,
+		ItemSpawnBehaviour: itemSpawnBehaviour,
+		Stage:              stageID,
+		TimerStartSeconds:  timerStartSeconds,
+		EnabledItems:       enabledItems,
+	}
 	return nil
 }
