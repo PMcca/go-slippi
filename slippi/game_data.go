@@ -173,7 +173,6 @@ func (d *Data) UnmarshalUBJSON(b []byte) error {
 
 		dec.data = dec.data[eventSize+1:] // Update the window of data, skipping the # of bytes read + the command byte.
 	}
-	fmt.Println(eventSizes)
 
 	return nil
 }
@@ -182,16 +181,16 @@ func (d *Data) UnmarshalUBJSON(b []byte) error {
 func parsePlayer(playerIndex int, dec *decoder) (Player, error) {
 	offset := playerIndex * 0x8
 
-	dashback := dec.readInt32(0x141 + offset)
+	dashBack := dec.readInt32(0x141 + offset)
 	shieldDrop := dec.readInt32(0x145 + offset)
 
 	var controllerFix string
 	switch {
-	case dashback != shieldDrop:
+	case dashBack != shieldDrop:
 		controllerFix = "Mixed"
-	case dashback == 1:
+	case dashBack == 1:
 		controllerFix = "UCF"
-	case dashback == 2:
+	case dashBack == 2:
 		controllerFix = "Dween"
 	default:
 		controllerFix = "None"
@@ -199,7 +198,7 @@ func parsePlayer(playerIndex int, dec *decoder) (Player, error) {
 
 	jisDecoder := japanese.ShiftJIS.NewDecoder()
 	// Start is the length of the string * playerIndex, + the offset.
-	nameTag, err := parseGameStartString((0x10*playerIndex)+0x161, 0x161, dec, jisDecoder, true)
+	nameTag, err := parseGameStartString((0x10*playerIndex)+0x161, 0x10, dec, jisDecoder, true)
 	if err != nil {
 		return Player{}, fmt.Errorf("%w:failed to parse name tag", err)
 	}

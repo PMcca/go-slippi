@@ -22,7 +22,7 @@ func (d *decoder) read(offset int) uint8 {
 
 // readN returns a slice of bytes between the given offset and the upperBound.
 func (d *decoder) readN(offset, upperBound int) []byte {
-	if offset+upperBound > d.size {
+	if upperBound > d.size {
 		return nil
 	}
 	return d.data[offset:upperBound]

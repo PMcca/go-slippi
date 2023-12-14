@@ -5,6 +5,7 @@ import (
 	"github.com/PMcca/go-slippi/internal/testutil"
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/PMcca/go-slippi/slippi/melee"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -47,6 +48,25 @@ func TestParseGame(t *testing.T) {
 
 		})
 	}
+}
+
+func TestGameStart(t *testing.T) {
+	t.Parallel()
+
+	t.Run("ParsesNametags", func(t *testing.T) {
+		t.Parallel()
+
+		filePath := "test/replays/nametags.slp"
+		actual, err := slippi.ParseGame(filePath)
+		require.NoError(t, err)
+
+		require.Len(t, actual.Data.GameStart.Players, 4)
+		assert.Equal(t, "AMNイ", actual.Data.GameStart.Players[0].Nametag)
+
+		filePath = "test/replays/nametags2.slp"
+		//assert.Equal(t, "か、9@", actual.Data.GameStart.Players[0].Nametag)
+		//assert.Equal(t, "A1=$", actual.Data.GameStart.Players[1].Nametag)
+	})
 }
 
 func TestParseMeta(t *testing.T) {
@@ -131,9 +151,9 @@ func TestParseMeta(t *testing.T) {
 
 func TestParse(t *testing.T) {
 	//t.SkipNow()
-	//g, err := slippi.ParseGame("test/replays/unranked_game1.slp")
+	g, err := slippi.ParseGame("test/replays/nametags.slp")
 	//g, err := slippi.ParseGame("test/replays/ranked_game1_tiebreak.slp")
-	g, err := slippi.ParseGame("test/replays/20221202T180900.slp")
+	//g, err := slippi.ParseGame("test/replays/20221202T180900.slp")
 	//g, err := slippi.ParseGame("test/replays/metadata.slp")
 	require.NoError(t, err)
 	fmt.Println(g)
