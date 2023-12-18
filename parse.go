@@ -1,0 +1,111 @@
+package goslippi
+
+import (
+	"bytes"
+	"encoding/binary"
+	"fmt"
+	"github.com/PMcca/go-slippi/internal/errutil"
+	"github.com/PMcca/go-slippi/internal/logging"
+	"github.com/PMcca/go-slippi/slippi"
+	"github.com/PMcca/go-slippi/slippi/event"
+	"github.com/PMcca/go-slippi/slippi/event/handler"
+	"github.com/PMcca/go-slippi/slippi/event/handler/handlers"
+	"github.com/toitware/ubjson"
+	"os"
+)
+
+var (
+	eventHandlers = map[event.Code]handler.EventHandler{
+		event.EventGameStart: handlers.GameStartHandler{},
+	}
+	log = logging.NewLogger()
+)
+
+type rawParser struct {
+	ParsedData slippi.Data
+}
+
+type parser struct {
+	RawParser rawParser       `ubjson:"raw"`
+	Meta      slippi.Metadata `ubjson:"metadata"`
+}
+
+// ParseGame reads the .slp file given by filePath and returns the decoded game.
+func ParseGame(filePath string) (slippi.Game, error) {
+	b, err := readFile(filePath)
+	if err != nil {
+		return slippi.Game{}, err
+	}
+
+	p := parser{}
+	if err := ubjson.Unmarshal(b, &p); err != nil {
+		return slippi.Game{}, errutil.WithMessagef(err, ErrParsingGame, "filePath: %s", filePath)
+	}
+
+	return slippi.Game{
+		Data: p.RawParser.ParsedData,
+		Meta: p.Meta,
+	}, nil
+}
+
+func (r *rawParser) UnmarshalUBJSON(b []byte) error {
+	// Beginning of raw array should always be '$U#l'.
+	if !bytes.Equal(b[0:4], []byte("$U#l")) {
+		return fmt.Errorf("%w:expected '$U#l', found %s", ErrInvalidRawStart, b[0:4]) // TODO move errors?
+	}
+
+	// The total size of the raw byte array, excluding "$U#lXXXX".
+	totalSize := int(binary.BigEndian.Uint32(b[4:]))
+
+	dec := event.Decoder{
+		Data: b[8:],
+		Size: len(b),
+	}
+	eventSizes, err := handlers.ParseEventPayloads(&dec) // Skip $U#l and 4 bytes for length.
+	if err != nil {
+		return err
+	}
+
+	startOffset := (eventSizes[event.EventPayloadsEvent] + 1) + 8 // Start reading from the first event after EventPayloads
+	dec.Data = b[startOffset:]
+
+	// Main event parsing loop
+	i := startOffset
+	for i < totalSize {
+		eventCode := event.Code(dec.Read(0x0))
+		eventSize, ok := eventSizes[eventCode]
+		if !ok {
+			return fmt.Errorf("%w:eventCode %X", ErrUnknownEventInEventSizes, eventCode)
+		}
+		dec.Size = eventSize + 1
+
+		eventHandler, ok := eventHandlers[eventCode]
+		if !ok {
+			log.Warn().Msgf("Unable to handle unknown event %X. Skipping.", eventCode)
+		} else {
+			if err := eventHandler.Parse(&dec, &r.ParsedData); err != nil {
+				return errutil.WithMessagef(err, ErrFailedEventParsing, "event code: %X", eventCode)
+			}
+		}
+
+		// TODO use dec.Size instead
+		dec.Data = dec.Data[eventSize+1:] // Update the window of data, skipping the # of bytes read + the command byte.
+		i += eventSize + 1
+	}
+
+	return nil
+}
+
+// readFile reads & returns the bytes of the given .slp file.
+func readFile(filePath string) ([]byte, error) {
+	if filePath == "" {
+		return nil, ErrEmptyFilePath
+	}
+
+	b, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, errutil.WithMessagef(err, ErrReadingFile, "filePath: %s", filePath)
+	}
+
+	return b, nil
+}

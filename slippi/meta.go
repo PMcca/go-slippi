@@ -9,10 +9,11 @@ import (
 
 // Metadata represents the parsed metadata element from a .slp file.
 type Metadata struct {
-	StartAt   string      `ubjson:"startAt"`
-	LastFrame int         `ubjson:"lastFrame"`
-	Players   PlayersMeta `ubjson:"players"`
-	PlayedOn  string      `ubjson:"playedOn"`
+	StartAt     string      `ubjson:"startAt"`
+	LastFrame   int         `ubjson:"lastFrame"`
+	Players     PlayersMeta `ubjson:"players"`
+	PlayedOn    string      `ubjson:"playedOn"`
+	ConsoleNick string      `ubjson:"consoleNick"`
 }
 
 // PlayerMeta is a single player in the game including their Slippi display name or in-game name (dependent on online/local).
