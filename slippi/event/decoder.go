@@ -48,7 +48,14 @@ func (d *Decoder) ReadWithBitmask(offset int, bitmask byte) byte {
 	return d.Data[offset] & bitmask
 }
 
-// ReadInt16 returns an int from the 2 bytes from the offset the Decoder assumes represents a uint16.
+// ReadUint16 returns an int from the 2 bytes from the offset the Decoder assumes represents a uint16.
+func (d *Decoder) ReadUint16(offset int) uint16 {
+	if offset+2 > d.Size {
+		return 0
+	}
+	return binary.BigEndian.Uint16(d.Data[offset : offset+2])
+}
+
 func (d *Decoder) ReadInt16(offset int) int {
 	if offset+2 > d.Size {
 		return 0
@@ -56,12 +63,19 @@ func (d *Decoder) ReadInt16(offset int) int {
 	return int(int16(binary.BigEndian.Uint16(d.Data[offset : offset+2])))
 }
 
-// ReadInt32 returns an int from the 4 bytes from the offset the Decoder assumes represents a uint32.
+// ReadUint32 returns a uint32 from the 4 bytes from the offset the Decoder assumes represents a uint32.
+func (d *Decoder) ReadUint32(offset int) uint32 {
+	if offset+4 > d.Size {
+		return 0
+	}
+	return binary.BigEndian.Uint32(d.Data[offset : offset+4])
+}
+
 func (d *Decoder) ReadInt32(offset int) int {
 	if offset+4 > d.Size {
 		return 0
 	}
-	return int(binary.BigEndian.Uint32(d.Data[offset : offset+4]))
+	return int(int32(binary.BigEndian.Uint32(d.Data[offset : offset+4])))
 }
 
 func (d *Decoder) ReadBool(offset int) bool {

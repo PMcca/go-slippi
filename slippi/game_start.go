@@ -1,9 +1,8 @@
 package slippi
 
-import (
-	"github.com/PMcca/go-slippi/slippi/melee"
-)
+import "github.com/PMcca/go-slippi/slippi/melee"
 
+// TODO add comments
 type TimerType uint8
 
 const (
@@ -115,15 +114,10 @@ type GameStart struct {
 	Scene              uint8 // Minor scene, should always be 0x2
 	GameMode           GameMode
 	Language           Language
-	RandomSeed         int
+	RandomSeed         uint32
 	IsPAL              bool
 	IsFrozenPS         bool
 	MatchID            string
 	GameNumber         int
 	TiebreakerNumber   int
-}
-
-// Data holds the parsed game data of the parsed .slp file.
-type Data struct {
-	GameStart GameStart
 }

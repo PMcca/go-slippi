@@ -16,7 +16,8 @@ import (
 
 var (
 	eventHandlers = map[event.Code]handler.EventHandler{
-		event.EventGameStart: handlers.GameStartHandler{},
+		event.EventGameStart:       handlers.GameStartHandler{},
+		event.EventMessageSplitter: handlers.MessageSplitterHandler{},
 	}
 	log = logging.NewLogger()
 )
@@ -37,7 +38,13 @@ func ParseGame(filePath string) (slippi.Game, error) {
 		return slippi.Game{}, err
 	}
 
-	p := parser{}
+	p := parser{
+		RawParser: rawParser{
+			ParsedData: slippi.Data{
+				Frames: map[int]slippi.Frame{},
+			},
+		},
+	}
 	if err := ubjson.Unmarshal(b, &p); err != nil {
 		return slippi.Game{}, errutil.WithMessagef(err, ErrParsingGame, "filePath: %s", filePath)
 	}
@@ -88,9 +95,8 @@ func (r *rawParser) UnmarshalUBJSON(b []byte) error {
 			}
 		}
 
-		// TODO use dec.Size instead
-		dec.Data = dec.Data[eventSize+1:] // Update the window of data, skipping the # of bytes read + the command byte.
-		i += eventSize + 1
+		dec.Data = dec.Data[dec.Size:] // Update the window of data, skipping the # of bytes read + the command byte.
+		i += dec.Size
 	}
 
 	return nil

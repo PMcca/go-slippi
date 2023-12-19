@@ -92,7 +92,6 @@ func buildInput(totalSize int) []byte {
 }
 
 func TestParse(t *testing.T) {
-	t.SkipNow()
 	//g, err := slippi.ParseGame("test/replays/nametags.slp")
 	//g, err := slippi.ParseGame("test/replays/ranked_game1_tiebreak.slp")
 	g, err := ParseGame("test/replays/20221202T180900.slp")

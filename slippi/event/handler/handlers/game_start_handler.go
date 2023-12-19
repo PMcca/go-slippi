@@ -54,14 +54,14 @@ func (g GameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 		IsFriendlyFire:     isFriendlyFire,
 		IsTeams:            dec.ReadBool(0xd),
 		ItemSpawnBehaviour: slippi.ItemSpawnBehaviour(dec.Read(0x10)),
-		Stage:              melee2.Stage(dec.ReadInt16(0x13)),
+		Stage:              melee2.Stage(dec.ReadUint16(0x13)),
 		TimerStartSeconds:  dec.ReadInt32(0x15),
 		EnabledItems:       enabledItems,
 		Players:            players,
 		Scene:              dec.Read(0x1a3),
 		GameMode:           slippi.GameMode(dec.Read(0x1a4)),
 		Language:           slippi.Language(dec.Read(0x2bd)),
-		RandomSeed:         dec.ReadInt32(0x13d),
+		RandomSeed:         dec.ReadUint32(0x13d),
 		IsPAL:              dec.ReadBool(0x1a1),
 		IsFrozenPS:         dec.ReadBool(0x1a2),
 		MatchID:            matchID,
@@ -75,8 +75,8 @@ func (g GameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 func parsePlayer(playerIndex int, dec *event.Decoder) (slippi.Player, error) {
 	offset := playerIndex * 0x8
 
-	dashBack := dec.ReadInt32(0x141 + offset)
-	shieldDrop := dec.ReadInt32(0x145 + offset)
+	dashBack := dec.ReadUint32(0x141 + offset)
+	shieldDrop := dec.ReadUint32(0x145 + offset)
 
 	var controllerFix string
 	switch {

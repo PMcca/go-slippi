@@ -9,6 +9,8 @@ const (
 	ErrUnknownEventInEventSizes Error = "unknown event in event payload sizes"
 	ErrNoHandlerForEvent        Error = "unable to handle unknown event"
 	ErrFailedEventParsing       Error = "failed to parse event"
+	ErrNoMessageSplitterCode    Error = "event code for message splitter incorrect, but did not encounter 'lastMessage'"
+	ErrUnknownMessageSplitEvent Error = "unknown event in message splitters"
 )
 
 func (e Error) Error() string {
