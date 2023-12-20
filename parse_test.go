@@ -94,7 +94,8 @@ func TestParse(t *testing.T) {
 	t.SkipNow()
 	//g, err := slippi.ParseGame("test/replays/nametags.slp")
 	//g, err := slippi.ParseGame("test/replays/ranked_game1_tiebreak.slp")
-	_, err := ParseGame("test/replays/20221202T180900.slp")
+	x, err := ParseGame("test/replays/20221202T180900.slp")
+	x = x
 	//g, err := slippi.ParseGame("test/replays/metadata.slp")
 	require.NoError(t, err)
 	//fmt.Println(g)

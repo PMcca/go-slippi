@@ -39,14 +39,7 @@ func (p PreFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 		YAnalogUCF:       dec.ReadInt8(0x40),
 	}
 
-	frame := data.Frames[frameNumber]
-	if frame.Players == nil {
-		frame.Players = map[uint8]slippi.PlayerFrameUpdate{}
-	}
-	if frame.Followers == nil {
-		frame.Followers = map[uint8]slippi.PlayerFrameUpdate{}
-	}
-
+	frame := fetchFrame(frameNumber, data)
 	if isFollower {
 		f := frame.Followers[playerIndex]
 		f.Pre = preFrame
@@ -59,4 +52,16 @@ func (p PreFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 
 	data.Frames[frameNumber] = frame
 	return nil
+}
+
+// fetchFrame returns the frame for the given frameNumber. It also ensures the Players and Followers maps are not nil.
+func fetchFrame(frameNumber int, data *slippi.Data) slippi.Frame {
+	frame := data.Frames[frameNumber]
+	if frame.Players == nil {
+		frame.Players = map[uint8]slippi.PlayerFrameUpdate{}
+	}
+	if frame.Followers == nil {
+		frame.Followers = map[uint8]slippi.PlayerFrameUpdate{}
+	}
+	return frame
 }

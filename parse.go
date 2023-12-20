@@ -19,6 +19,7 @@ var (
 		event.EventFrameStart:      handlers.FrameStartHandler{},
 		event.EventPreFrame:        handlers.PreFrameHandler{},
 		event.EventMessageSplitter: handlers.MessageSplitterHandler{},
+		event.EventPostFrame:       handlers.PostFrameHandler{},
 	}
 	log = logging.NewLogger()
 )

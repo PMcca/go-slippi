@@ -10,23 +10,23 @@ import (
 )
 
 var (
-	preFrameSeed     = uint32(123456)
-	actionStateID    = uint16(345)
-	XPos             = float32(12.4)
-	YPos             = float32(17.12)
-	facingDirection  = float32(2.0)
-	joyStickX        = float32(0.88)
-	joyStickY        = float32(0.1)
-	cStickX          = float32(0.22)
-	cStickY          = float32(0.5)
-	trigger          = float32(0.01)
-	processedButtons = uint32(0b01010101010101010101010101010101)
-	physicalButtons  = uint16(0b1100110011001100)
-	physicalLTrigger = float32(0.234)
-	physicalRTrigger = float32(0.98)
-	analogUCFX       = int8(111)
-	percent          = float32(84.1)
-	analogUCFY       = int8(12)
+	preFrameSeed        = uint32(123456)
+	preActionStateID    = uint16(345)
+	preXpos             = float32(12.4)
+	preYPos             = float32(17.12)
+	preFacingDirection  = float32(2.0)
+	preJoyStickX        = float32(0.88)
+	preJoyStickY        = float32(0.1)
+	preCStickX          = float32(0.22)
+	preCStickY          = float32(0.5)
+	preTrigger          = float32(0.01)
+	preProcessedButtons = uint32(0b01010101010101010101010101010101)
+	prePhysicalButtons  = uint16(0b1100110011001100)
+	prePhysicalLTrigger = float32(0.234)
+	prePhysicalRTrigger = float32(0.98)
+	preAnalogUCFX       = int8(111)
+	prePercent          = float32(84.1)
+	preAnalogUCFY       = int8(12)
 )
 
 func TestParsePreFrame(t *testing.T) {
@@ -51,22 +51,22 @@ func TestParsePreFrame(t *testing.T) {
 							PlayerIndex:      2,
 							IsFollower:       false,
 							RandomSeed:       preFrameSeed,
-							ActionStateID:    actionStateID,
-							XPos:             XPos,
-							YPos:             YPos,
-							FacingDirection:  facingDirection,
-							JoyStickX:        joyStickX,
-							JoyStickY:        joyStickY,
-							CStickX:          cStickX,
-							CStickY:          cStickY,
-							Trigger:          trigger,
-							ProcessedButtons: processedButtons,
-							PhysicalButtons:  physicalButtons,
-							PhysicalTriggerL: physicalLTrigger,
-							PhysicalTriggerR: physicalRTrigger,
-							XAnalogUCF:       analogUCFX,
-							Percent:          percent,
-							YAnalogUCF:       analogUCFY,
+							ActionStateID:    preActionStateID,
+							XPos:             preXpos,
+							YPos:             preYPos,
+							FacingDirection:  preFacingDirection,
+							JoyStickX:        preJoyStickX,
+							JoyStickY:        preJoyStickY,
+							CStickX:          preCStickX,
+							CStickY:          preCStickY,
+							Trigger:          preTrigger,
+							ProcessedButtons: preProcessedButtons,
+							PhysicalButtons:  prePhysicalButtons,
+							PhysicalTriggerL: prePhysicalLTrigger,
+							PhysicalTriggerR: prePhysicalRTrigger,
+							XAnalogUCF:       preAnalogUCFX,
+							Percent:          prePercent,
+							YAnalogUCF:       preAnalogUCFY,
 						},
 					},
 				},
@@ -87,22 +87,22 @@ func TestParsePreFrame(t *testing.T) {
 							PlayerIndex:      1,
 							IsFollower:       true,
 							RandomSeed:       preFrameSeed,
-							ActionStateID:    actionStateID,
-							XPos:             XPos,
-							YPos:             YPos,
-							FacingDirection:  facingDirection,
-							JoyStickX:        joyStickX,
-							JoyStickY:        joyStickY,
-							CStickX:          cStickX,
-							CStickY:          cStickY,
-							Trigger:          trigger,
-							ProcessedButtons: processedButtons,
-							PhysicalButtons:  physicalButtons,
-							PhysicalTriggerL: physicalLTrigger,
-							PhysicalTriggerR: physicalRTrigger,
-							XAnalogUCF:       analogUCFX,
-							Percent:          percent,
-							YAnalogUCF:       analogUCFY,
+							ActionStateID:    preActionStateID,
+							XPos:             preXpos,
+							YPos:             preYPos,
+							FacingDirection:  preFacingDirection,
+							JoyStickX:        preJoyStickX,
+							JoyStickY:        preJoyStickY,
+							CStickX:          preCStickX,
+							CStickY:          preCStickY,
+							Trigger:          preTrigger,
+							ProcessedButtons: preProcessedButtons,
+							PhysicalButtons:  prePhysicalButtons,
+							PhysicalTriggerL: prePhysicalLTrigger,
+							PhysicalTriggerR: prePhysicalRTrigger,
+							XAnalogUCF:       preAnalogUCFX,
+							Percent:          prePercent,
+							YAnalogUCF:       preAnalogUCFY,
 						},
 					},
 				},
@@ -147,22 +147,22 @@ func buildPreFrameInput(frameNumber int32, playerIndex uint8, isFollower bool) [
 	out = append(out, playerIndex)
 	out = append(out, follower)
 	testutil.PutUint32(&out, preFrameSeed)
-	testutil.PutUint16(&out, actionStateID)
-	testutil.PutFloat32(&out, XPos)
-	testutil.PutFloat32(&out, YPos)
-	testutil.PutFloat32(&out, facingDirection)
-	testutil.PutFloat32(&out, joyStickX)
-	testutil.PutFloat32(&out, joyStickY)
-	testutil.PutFloat32(&out, cStickX)
-	testutil.PutFloat32(&out, cStickY)
-	testutil.PutFloat32(&out, trigger)
-	testutil.PutUint32(&out, processedButtons)
-	testutil.PutUint16(&out, physicalButtons)
-	testutil.PutFloat32(&out, physicalLTrigger)
-	testutil.PutFloat32(&out, physicalRTrigger)
-	out = append(out, byte(analogUCFX))
-	testutil.PutFloat32(&out, percent)
-	out = append(out, byte(analogUCFY))
+	testutil.PutUint16(&out, preActionStateID)
+	testutil.PutFloat32(&out, preXpos)
+	testutil.PutFloat32(&out, preYPos)
+	testutil.PutFloat32(&out, preFacingDirection)
+	testutil.PutFloat32(&out, preJoyStickX)
+	testutil.PutFloat32(&out, preJoyStickY)
+	testutil.PutFloat32(&out, preCStickX)
+	testutil.PutFloat32(&out, preCStickY)
+	testutil.PutFloat32(&out, preTrigger)
+	testutil.PutUint32(&out, preProcessedButtons)
+	testutil.PutUint16(&out, prePhysicalButtons)
+	testutil.PutFloat32(&out, prePhysicalLTrigger)
+	testutil.PutFloat32(&out, prePhysicalRTrigger)
+	out = append(out, byte(preAnalogUCFX))
+	testutil.PutFloat32(&out, prePercent)
+	out = append(out, byte(preAnalogUCFY))
 
 	return out
 }
