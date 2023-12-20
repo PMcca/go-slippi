@@ -11,6 +11,26 @@ const (
 
 )
 
+type MissileType uint8
+
+const (
+	MissileHoming MissileType = iota // 0
+	MissileSuper                     // 1
+)
+
+type TurnipFace uint8
+
+const (
+	TurnipSmile       TurnipFace = iota // 0
+	TurnipTEyes                         // 1
+	TurnipLineEyes                      // 2
+	TurnipCircleEyes                    // 3
+	TurnipUpwardCurve                   // 4
+	TurnipWink                          // 5
+	TurnipDotEyes                       // 6
+	TurnipStitchFace                    // 7
+)
+
 type SelfInducedSpeeds struct {
 	AirX    float32
 	AirY    float32
@@ -84,6 +104,23 @@ type FrameStart struct {
 }
 
 type ItemUpdate struct {
+	FrameNumber          int
+	ItemTypeID           uint16
+	State                uint8
+	FacingDirection      float32
+	XVelocity            float32
+	YVelocity            float32
+	XPos                 float32
+	YPos                 float32
+	DamageTaken          uint16
+	ExpirationTimer      float32
+	SpawnID              uint32
+	MissileType          MissileType
+	TurnipFace           TurnipFace
+	ChargeShotIsLaunched bool
+	ChargeShotPower      uint8
+	Owner                int8
+	InstanceID           uint16
 }
 
 // Frame represents a single, complete frame in-game, including the updates for all the characters for said frame.
