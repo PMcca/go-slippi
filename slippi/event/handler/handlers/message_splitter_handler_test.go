@@ -74,6 +74,7 @@ func buildMessageSplitterInput() []byte {
 		input[i] = byte(i + 1)
 	}
 
+	// Put Command Code as first byte
 	input[0] = byte(event.EventMessageSplitter)
 	input[517] = byte(event.EventMessageSplitter)
 
@@ -89,9 +90,11 @@ func buildMessageSplitterInput() []byte {
 	input[517+513] = sizeBuf[0]
 	input[517+514] = sizeBuf[1]
 
+	// Put command code that these message splitter events are for
 	input[515] = byte(event.EventGeckoList)
 	input[517+515] = byte(event.EventGeckoList)
 
+	// Finally, set "isFinalMessage" field. First payload is 0, second is 1.
 	input[516] = 0
 	input[517+516] = 1
 

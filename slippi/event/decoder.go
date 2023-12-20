@@ -32,6 +32,14 @@ func (d *Decoder) Read(offset int) uint8 {
 	return d.Data[offset]
 }
 
+// ReadInt8 returns an int8 at the given offset.
+func (d *Decoder) ReadInt8(offset int) int8 {
+	if offset > d.Size {
+		return 0
+	}
+	return int8(d.Data[offset])
+}
+
 // ReadN returns a slice of bytes between the given offset and the upperBound.
 func (d *Decoder) ReadN(offset, upperBound int) []byte {
 	if upperBound > d.Size {
@@ -91,15 +99,6 @@ func (d *Decoder) ReadFloat32(offset int) float32 {
 	if offset+4 > d.Size {
 		return 0
 	}
-	nums := d.Data[offset : offset+4]
-	// Combine the 4 bytes into a single uint32 number
-	combined := uint32(nums[0])
-	combined <<= 8
-	combined += uint32(nums[1])
-	combined <<= 8
-	combined += uint32(nums[2])
-	combined <<= 8
-	combined += uint32(nums[3])
-
-	return math.Float32frombits(combined)
+	f := d.ReadUint32(offset)
+	return math.Float32frombits(f)
 }

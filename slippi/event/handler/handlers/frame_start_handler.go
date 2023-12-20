@@ -20,6 +20,7 @@ func (f FrameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	}
 	frame := data.Frames[frameNumber]
 	frame.FrameStart = frameStart
+	frame.FrameNumber = frameNumber
 	data.Frames[frameNumber] = frame
 
 	return nil

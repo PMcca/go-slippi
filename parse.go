@@ -2,7 +2,6 @@ package goslippi
 
 import (
 	"bytes"
-	"encoding/binary"
 	"fmt"
 	"github.com/PMcca/go-slippi/internal/errutil"
 	"github.com/PMcca/go-slippi/internal/logging"
@@ -17,15 +16,19 @@ import (
 var (
 	eventHandlers = map[event.Code]handler.EventHandler{
 		event.EventGameStart:       handlers.GameStartHandler{},
+		event.EventFrameStart:      handlers.FrameStartHandler{},
+		event.EventPreFrame:        handlers.PreFrameHandler{},
 		event.EventMessageSplitter: handlers.MessageSplitterHandler{},
 	}
 	log = logging.NewLogger()
 )
 
+// rawParser contains the parsed Slippi replay and is used as the orchestrator in the parsing process.
 type rawParser struct {
 	ParsedData slippi.Data
 }
 
+// parser wraps a rawParser and slippi.Metadata, and is passed into ubjson.Unmarshal() to begin the parsing process.
 type parser struct {
 	RawParser rawParser       `ubjson:"raw"`
 	Meta      slippi.Metadata `ubjson:"metadata"`
@@ -55,14 +58,13 @@ func ParseGame(filePath string) (slippi.Game, error) {
 	}, nil
 }
 
+// UnmarshalUBJSON implements the ubjson.Unmarshaler interface. It receives the array of bytes from the 'raw' array and
+// orchestrates the parsing process. rawParser implements this to separate this logic from slippi.Data.
 func (r *rawParser) UnmarshalUBJSON(b []byte) error {
 	// Beginning of raw array should always be '$U#l'.
 	if !bytes.Equal(b[0:4], []byte("$U#l")) {
 		return fmt.Errorf("%w:expected '$U#l', found %s", ErrInvalidRawStart, b[0:4]) // TODO move errors?
 	}
-
-	// The total size of the raw byte array, excluding "$U#lXXXX".
-	totalSize := int(binary.BigEndian.Uint32(b[4:]))
 
 	dec := event.Decoder{
 		Data: b[8:],
@@ -77,8 +79,7 @@ func (r *rawParser) UnmarshalUBJSON(b []byte) error {
 	dec.Data = b[startOffset:]
 
 	// Main event parsing loop
-	i := startOffset
-	for i < totalSize {
+	for len(dec.Data) > 0 {
 		eventCode := event.Code(dec.Read(0x0))
 		eventSize, ok := eventSizes[eventCode]
 		if !ok {
@@ -88,15 +89,16 @@ func (r *rawParser) UnmarshalUBJSON(b []byte) error {
 
 		eventHandler, ok := eventHandlers[eventCode]
 		if !ok {
-			log.Warn().Msgf("Unable to handle unknown event %X. Skipping.", eventCode)
+			// TODO re-add log message when finished parsers
+			//log.Warn().Msgf("Unable to handle unknown event %X. Skipping.", eventCode)
 		} else {
 			if err := eventHandler.Parse(&dec, &r.ParsedData); err != nil {
 				return errutil.WithMessagef(err, ErrFailedEventParsing, "event code: %X", eventCode)
 			}
 		}
 
-		dec.Data = dec.Data[dec.Size:] // Update the window of data, skipping the # of bytes read + the command byte.
-		i += dec.Size
+		// Update the window of data, skipping the # of bytes read + the command byte.
+		dec.Data = dec.Data[dec.Size:]
 	}
 
 	return nil

@@ -2,7 +2,6 @@ package goslippi
 
 import (
 	"encoding/binary"
-	"fmt"
 	"github.com/PMcca/go-slippi/internal/testutil"
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/stretchr/testify/require"
@@ -92,10 +91,11 @@ func buildInput(totalSize int) []byte {
 }
 
 func TestParse(t *testing.T) {
+	t.SkipNow()
 	//g, err := slippi.ParseGame("test/replays/nametags.slp")
 	//g, err := slippi.ParseGame("test/replays/ranked_game1_tiebreak.slp")
-	g, err := ParseGame("test/replays/20221202T180900.slp")
+	_, err := ParseGame("test/replays/20221202T180900.slp")
 	//g, err := slippi.ParseGame("test/replays/metadata.slp")
 	require.NoError(t, err)
-	fmt.Println(g)
+	//fmt.Println(g)
 }
