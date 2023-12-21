@@ -46,7 +46,6 @@ func TestPlayersEliminated(t *testing.T) {
 			"Frame %d does not contain player 0 after stock steal", i)
 	}
 
-	// for (let i = p1ElimFrame2 + 1; i <= gameEndFrame; i++) {
 	for i := p1ElimFrame2 + 1; i <= gameEndFrame; i++ {
 		for i := p1ElimFrame + 1; i < p1StockStealFrame; i++ {
 			require.Len(t, frames[i].Players, 3,
