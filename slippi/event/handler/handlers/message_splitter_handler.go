@@ -14,6 +14,7 @@ const (
 	messageSplitterSize = 516
 )
 
+// MessageSplitterHandler handles the parsing of MessageSplitter events.
 type MessageSplitterHandler struct{}
 
 // Parse implements the handler.EventHandler interface. It reads all the payloads of each MessageSplitter event

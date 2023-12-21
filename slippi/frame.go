@@ -7,6 +7,7 @@ const (
 	FirstPlayableFrame = -39
 )
 
+// HurtboxCollisionState represents the possible HurtboxCollision states a character can be in.
 type HurtboxCollisionState uint8
 
 const (
@@ -16,6 +17,7 @@ const (
 
 )
 
+// MissileType represents the two kinds of missiles (Side-B) Samus can fire.
 type MissileType uint8
 
 const (
@@ -23,6 +25,7 @@ const (
 	MissileSuper                     // 1
 )
 
+// TurnipFace represents the different turnips (Down-B) Peach can pull
 type TurnipFace uint8
 
 const (
@@ -36,6 +39,7 @@ const (
 	TurnipStitchFace                    // 7
 )
 
+// SelfInducedSpeeds holds the speeds that are induced by the player.
 type SelfInducedSpeeds struct {
 	AirX    float32
 	AirY    float32
@@ -44,6 +48,7 @@ type SelfInducedSpeeds struct {
 	GroundX float32
 }
 
+// PreFrameUpdate represents a parsed event.EventPreFrame event.
 type PreFrameUpdate struct {
 	FrameNumber      int
 	PlayerIndex      uint8
@@ -58,8 +63,8 @@ type PreFrameUpdate struct {
 	CStickX          float32
 	CStickY          float32
 	Trigger          float32
-	ProcessedButtons uint32 //TODO figure out
-	PhysicalButtons  uint16 // TODO enum?
+	ProcessedButtons uint32
+	PhysicalButtons  uint16
 	PhysicalTriggerL float32
 	PhysicalTriggerR float32
 	XAnalogUCF       int8
@@ -67,6 +72,7 @@ type PreFrameUpdate struct {
 	YAnalogUCF       int8
 }
 
+// PostFrameUpdate represents a parsed event.EventPostFrame event.
 type PostFrameUpdate struct {
 	FrameNumber             int
 	PlayerIndex             uint8
@@ -103,12 +109,14 @@ type PlayerFrameUpdate struct {
 	Post        PostFrameUpdate
 }
 
+// FrameStart represents a parsed event.EventFrameStart event.
 type FrameStart struct {
 	FrameNumber       int
 	Seed              uint32
 	SceneFrameCounter uint32
 }
 
+// ItemUpdate represents a parsed event.EventItemUpdate event.
 type ItemUpdate struct {
 	FrameNumber          int
 	ItemTypeID           uint16

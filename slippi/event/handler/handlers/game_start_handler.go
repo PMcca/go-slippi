@@ -12,8 +12,11 @@ import (
 	"strings"
 )
 
+// GameStartHandler handles the parsing of GameStart events.
 type GameStartHandler struct{}
 
+// Parse implements the handler.EventHandler interface. It parses a GameStart event and puts its output into the
+// given slippi.Data struct.
 func (h GameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	slippiVersion := fmt.Sprintf("%d.%d.%d",
 		dec.Read(0x1),

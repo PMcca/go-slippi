@@ -5,8 +5,11 @@ import (
 	"github.com/PMcca/go-slippi/slippi/event"
 )
 
+// GameEndHandler handles the parsing of GameEnd events.
 type GameEndHandler struct{}
 
+// Parse implements the handler.EventHandler interface. It parses a GameEnd event and puts its output into the
+// given slippi.Data struct.
 func (h GameEndHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	var placements []slippi.PlayerPlacement
 	for i := 0; i < 4; i++ {

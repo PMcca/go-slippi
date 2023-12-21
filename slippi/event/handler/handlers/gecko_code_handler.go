@@ -5,8 +5,11 @@ import (
 	"github.com/PMcca/go-slippi/slippi/event"
 )
 
+// GeckoCodeHandler handles the parsing of GeckoCode events.
 type GeckoCodeHandler struct{}
 
+// Parse implements the handler.EventHandler interface. It parses a GeckoCode event and puts its output into the
+// given slippi.Data struct.
 func (h GeckoCodeHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	var codes []slippi.GeckoCode
 	i := 1

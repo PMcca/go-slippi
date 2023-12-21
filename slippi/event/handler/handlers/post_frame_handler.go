@@ -6,8 +6,11 @@ import (
 	"github.com/PMcca/go-slippi/slippi/melee"
 )
 
+// PostFrameHandler handles the parsing of PostFrame events.
 type PostFrameHandler struct{}
 
+// Parse implements the handler.EventHandler interface. It parses a PostFrame event and puts its output into the
+// given slippi.Data struct.
 func (h PostFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	if data.Frames == nil {
 		data.Frames = map[int]slippi.Frame{}

@@ -5,8 +5,11 @@ import (
 	"github.com/PMcca/go-slippi/slippi/event"
 )
 
+// ItemUpdateHandler handles the parsing of ItemUpdate events.
 type ItemUpdateHandler struct{}
 
+// Parse implements the handler.EventHandler interface. It parses a ItemUpdate event and puts its output into the
+// given slippi.Data struct.
 func (h ItemUpdateHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	if data.Frames == nil {
 		data.Frames = map[int]slippi.Frame{}

@@ -5,8 +5,11 @@ import (
 	"github.com/PMcca/go-slippi/slippi/event"
 )
 
+// FrameStartHandler handles the parsing FrameStart of events.
 type FrameStartHandler struct{}
 
+// Parse implements the handler.EventHandler interface. It parses a FrameStart event and puts its output into the
+// given slippi.Data struct.
 func (h FrameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	frameNumber := dec.ReadInt32(0x1)
 	frameStart := slippi.FrameStart{

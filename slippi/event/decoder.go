@@ -8,15 +8,15 @@ import (
 // TODO add tests
 
 // Decoder wraps the raw data of a .slp file. It serves as a window into a specific part of the array, which is then
-// acted upon by the corresponding offsets defined in the .slp spec (https://github.com/PMcca/slippi-wiki/blob/master/SPEC.md)
+// acted upon by the corresponding offsets defined in the .slp spec (https://github.com/project-slippi/slippi-wiki/blob/master/SPEC.md)
 // Decoder.size is the eventSize+1, because the size of the data is a valid index. e.g:
 //   - offset = 97
 //   - size = 100
 //
-// When Reading a uint32, we will Read bytes [97, 98, 99, 100], so the size must be +1 to allow for this.
+// When Reading a uint32, we will read bytes [97, 98, 99, 100], so the size must be +1 to allow for this.
 type Decoder struct {
-	Data []byte // TODO make unexported
-	Size int    // size is the size of the event being parsed, used for bounds checking.
+	Data []byte
+	Size int // size is the size of the event being parsed, used for bounds checking.
 }
 
 // Read returns a byte at the given offset.
@@ -59,6 +59,7 @@ func (d *Decoder) ReadUint16(offset int) uint16 {
 	return binary.BigEndian.Uint16(d.Data[offset : offset+2])
 }
 
+// ReadInt16 returns an int from the 2 bytes from the offset the Decoder assumes represents an int16.
 func (d *Decoder) ReadInt16(offset int) int {
 	if offset >= d.Size || offset+2 > d.Size {
 		return 0
@@ -74,6 +75,7 @@ func (d *Decoder) ReadUint32(offset int) uint32 {
 	return binary.BigEndian.Uint32(d.Data[offset : offset+4])
 }
 
+// ReadInt32 returns an int from the 4 bytes from the offset the Decoder assumes represents an int32.
 func (d *Decoder) ReadInt32(offset int) int {
 	if offset+4 > d.Size {
 		return 0
@@ -81,6 +83,7 @@ func (d *Decoder) ReadInt32(offset int) int {
 	return int(int32(binary.BigEndian.Uint32(d.Data[offset : offset+4])))
 }
 
+// ReadBool returns a bool from the byte from the offset.
 func (d *Decoder) ReadBool(offset int) bool {
 	if offset > d.Size {
 		return false

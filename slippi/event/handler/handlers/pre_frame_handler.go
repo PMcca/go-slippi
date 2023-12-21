@@ -5,8 +5,11 @@ import (
 	"github.com/PMcca/go-slippi/slippi/event"
 )
 
+// PreFrameHandler handles the parsing of PreFrame events.
 type PreFrameHandler struct{}
 
+// Parse implements the handler.EventHandler interface. It parses a PreFrame event and puts its output into the
+// given slippi.Data struct.
 func (h PreFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	if data.Frames == nil {
 		data.Frames = map[int]slippi.Frame{}

@@ -1,5 +1,6 @@
 package goslippi
 
+// Error is an error for this package.
 type Error string
 
 const (
@@ -13,6 +14,7 @@ const (
 	ErrFailedEventParsing       Error = "failed to parse event"
 )
 
+// Error implements the error interface.
 func (e Error) Error() string {
 	return string(e)
 }

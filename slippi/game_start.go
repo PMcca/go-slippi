@@ -2,7 +2,7 @@ package slippi
 
 import "github.com/PMcca/go-slippi/slippi/melee"
 
-// TODO add comments
+// TimerType is the behaviour of the timer i.e. timer is incrementing or decrementing.
 type TimerType uint8
 
 const (
@@ -11,6 +11,7 @@ const (
 	TimerIncreasing TimerType = 3
 )
 
+// InGameMode is the game mode being played.
 type InGameMode uint8
 
 const (
@@ -20,6 +21,7 @@ const (
 	InGameModeBonus                   // 3
 )
 
+// ItemSpawnBehaviour is how frequently items will spawn, if at all.
 type ItemSpawnBehaviour int8
 
 const (
@@ -31,6 +33,7 @@ const (
 	ItemSpawnVeryHigh                               // 4
 )
 
+// PlayerType is if a player is human or AI-controlled.
 type PlayerType uint8
 
 const (
@@ -40,6 +43,7 @@ const (
 	PlayerTypeEmpty                   // 3
 )
 
+// TeamShade is the tint given to identical characters on the same team.
 type TeamShade uint8
 
 const (
@@ -57,6 +61,7 @@ const (
 	TeamColourGreen                   // 2
 )
 
+// GameMode is if a game is played locally via Vs, or is online (SLippi).
 type GameMode uint8
 
 const (
@@ -64,6 +69,7 @@ const (
 	GameModeOnline GameMode = 0x8
 )
 
+// Language is the language used in the game.
 type Language uint8
 
 const (
@@ -71,6 +77,7 @@ const (
 	LanguageEnglish                  // 1
 )
 
+// Player is a player in-game.
 type Player struct {
 	Index                  int // Port = Index + 1
 	Port                   int
@@ -100,6 +107,7 @@ type Player struct {
 	UserID                 string
 }
 
+// GameStart represents a parsed event.EventGameStart event.
 type GameStart struct {
 	SlippiVersion      string
 	TimerType          TimerType
