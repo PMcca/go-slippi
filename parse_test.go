@@ -1,7 +1,6 @@
 package goslippi
 
 import (
-	"encoding/binary"
 	"github.com/PMcca/go-slippi/internal/testutil"
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/stretchr/testify/require"
@@ -78,25 +77,4 @@ func TestData_UnmarshalUBJSON(t *testing.T) {
 			require.Equal(t, tc.expected, d)
 		})
 	}
-}
-
-func buildInput(totalSize int) []byte {
-	r := make([]byte, 4)
-	copy(r, rawStart)
-
-	b := make([]byte, 4)
-	binary.BigEndian.PutUint32(b, uint32(totalSize))
-
-	return append(r, b...)
-}
-
-func TestParse(t *testing.T) {
-	t.SkipNow()
-	//g, err := slippi.ParseGame("test/replays/nametags.slp")
-	//g, err := slippi.ParseGame("test/replays/ranked_game1_tiebreak.slp")
-	x, err := ParseGame("test/replays/20221202T180900.slp")
-	x = x
-	//g, err := slippi.ParseGame("test/replays/metadata.slp")
-	require.NoError(t, err)
-	//fmt.Println(g)
 }
