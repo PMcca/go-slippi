@@ -22,6 +22,7 @@ var (
 		event.EventGameEnd:         handlers.GameEndHandler{},
 		event.EventFrameStart:      handlers.FrameStartHandler{},
 		event.EventItemUpdate:      handlers.ItemUpdateHandler{},
+		event.EventFrameBookend:    handlers.FrameBookendHandler{},
 		event.EventGeckoList:       handlers.GeckoCodeHandler{},
 		event.EventMessageSplitter: handlers.MessageSplitterHandler{},
 	}
@@ -94,8 +95,7 @@ func (r *rawParser) UnmarshalUBJSON(b []byte) error {
 
 		eventHandler, ok := eventHandlers[eventCode]
 		if !ok {
-			// TODO re-add log message when finished parsers
-			//log.Warn().Msgf("Unable to handle unknown event %X. Skipping.", eventCode)
+			log.Warn().Msgf("Unable to handle unknown event %X. Skipping.", eventCode)
 		} else {
 			if err := eventHandler.Parse(&dec, &r.ParsedData); err != nil {
 				return errutil.WithMessagef(err, ErrFailedEventParsing, "event code: %X", eventCode)

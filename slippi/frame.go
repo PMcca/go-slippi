@@ -137,11 +137,18 @@ type ItemUpdate struct {
 	InstanceID           uint16
 }
 
+// FrameBookend represents a parsed event.EventFrameBookend event.
+type FrameBookend struct {
+	FrameNumber          int
+	LatestFinalisedFrame int
+}
+
 // Frame represents a single, complete frame in-game, including the updates for all the characters for said frame.
 type Frame struct {
-	FrameNumber int
-	FrameStart  FrameStart
-	Players     map[uint8]PlayerFrameUpdate // Map of PlayerIndex -> PlayerFrameUpdate
-	Followers   map[uint8]PlayerFrameUpdate
-	ItemUpdate  []ItemUpdate
+	FrameNumber  int
+	FrameStart   FrameStart
+	Players      map[uint8]PlayerFrameUpdate // Map of PlayerIndex -> PlayerFrameUpdate
+	Followers    map[uint8]PlayerFrameUpdate
+	ItemUpdate   []ItemUpdate
+	FrameBookend FrameBookend
 }
