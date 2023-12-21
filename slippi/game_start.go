@@ -74,7 +74,7 @@ const (
 type Player struct {
 	Index                  int // Port = Index + 1
 	Port                   int
-	CharacterID            melee.InternalCharacterID
+	CharacterID            melee.ExternalCharacterID
 	PlayerType             PlayerType
 	StartStocks            uint8
 	CostumeIndex           uint8

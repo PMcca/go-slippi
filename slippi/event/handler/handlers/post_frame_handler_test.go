@@ -11,7 +11,6 @@ import (
 )
 
 var (
-	postCharacterID        = melee.Falco
 	postActionStateID      = uint16(345)
 	postXpos               = float32(12.4)
 	postYPos               = float32(17.12)
@@ -44,24 +43,27 @@ func TestParsePostFrame(t *testing.T) {
 	t.Parallel()
 
 	testCases := map[string]struct {
-		frameNumber  int
-		playerIndex  uint8
-		isFollower   bool
+		frameNumber int
+		playerIndex uint8
+		isFollower  bool
+		characterID melee.InternalCharacterID
+
 		expected     slippi.Frame
 		errAssertion require.ErrorAssertionFunc
 	}{
 		"CreatesPostFrameForPlayer": {
-			frameNumber: -123,
+			frameNumber: -22,
 			playerIndex: 2,
 			isFollower:  false,
+			characterID: melee.Int_Falco,
 			expected: slippi.Frame{
 				Players: map[uint8]slippi.PlayerFrameUpdate{
 					2: slippi.PlayerFrameUpdate{
 						Post: slippi.PostFrameUpdate{
-							FrameNumber:             -123,
+							FrameNumber:             -22,
 							PlayerIndex:             2,
 							IsFollower:              false,
-							CharacterID:             postCharacterID,
+							CharacterID:             melee.Int_Falco,
 							ActionStateID:           postActionStateID,
 							XPos:                    postXpos,
 							YPos:                    postYPos,
@@ -102,6 +104,7 @@ func TestParsePostFrame(t *testing.T) {
 			frameNumber: 924,
 			playerIndex: 1,
 			isFollower:  true,
+			characterID: melee.Int_Falco,
 			expected: slippi.Frame{
 				Followers: map[uint8]slippi.PlayerFrameUpdate{
 					1: slippi.PlayerFrameUpdate{
@@ -109,7 +112,7 @@ func TestParsePostFrame(t *testing.T) {
 							FrameNumber:             924,
 							PlayerIndex:             1,
 							IsFollower:              true,
-							CharacterID:             postCharacterID,
+							CharacterID:             melee.Int_Falco,
 							ActionStateID:           postActionStateID,
 							XPos:                    postXpos,
 							YPos:                    postYPos,
@@ -154,7 +157,7 @@ func TestParsePostFrame(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			input := buildPostFrameInput(int32(tc.frameNumber), tc.playerIndex, tc.isFollower)
+			input := buildPostFrameInput(int32(tc.frameNumber), tc.playerIndex, tc.isFollower, tc.characterID)
 			dec := event.Decoder{
 				Data: input,
 				Size: len(input),
@@ -170,7 +173,65 @@ func TestParsePostFrame(t *testing.T) {
 	}
 }
 
-func buildPostFrameInput(frameNumber int32, playerIndex uint8, isFollower bool) []byte {
+func TestZeldaSheikFix(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		internalCharacterID melee.InternalCharacterID
+		expected            slippi.Player
+		errAssertion        require.ErrorAssertionFunc
+	}{
+		"SetsGameStartPlayerCharacterToSheikOnFirstFrame": {
+			internalCharacterID: melee.Int_Sheik,
+			expected: slippi.Player{
+				Index:       0,
+				CharacterID: melee.Ext_Sheik,
+			},
+			errAssertion: require.NoError,
+		},
+		"SetsGameStartPlayerCharacterToZeldaOnFirstFrame": {
+			internalCharacterID: melee.Int_Zelda,
+			expected: slippi.Player{
+				Index:       0,
+				CharacterID: melee.Ext_Zelda,
+			},
+			errAssertion: require.NoError,
+		},
+	}
+
+	for name, testCase := range testCases {
+		tc := testCase
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			input := buildPostFrameInput(int32(-123), 0, false, tc.internalCharacterID)
+			dec := event.Decoder{
+				Data: input,
+				Size: len(input),
+			}
+
+			d := slippi.Data{
+				GameStart: slippi.GameStart{
+					Players: []slippi.Player{
+						{
+							Index: 0, // TODO change to uint8
+						},
+					},
+				},
+			}
+
+			err := handlers.PostFrameHandler{}.Parse(&dec, &d)
+			tc.errAssertion(t, err)
+			require.Truef(t, len(d.GameStart.Players) > 0, "Length of players is empty")
+
+			actual := d.GameStart.Players[0]
+			require.Equal(t, tc.expected, actual)
+		})
+	}
+}
+
+func buildPostFrameInput(frameNumber int32, playerIndex uint8, isFollower bool, characterID melee.InternalCharacterID) []byte {
 	out := []byte{byte(event.EventPreFrame)}
 	follower := byte(0)
 	if isFollower {
@@ -180,7 +241,7 @@ func buildPostFrameInput(frameNumber int32, playerIndex uint8, isFollower bool) 
 	testutil.PutInt32(&out, frameNumber)
 	out = append(out, playerIndex)
 	out = append(out, follower)
-	out = append(out, byte(postCharacterID))
+	out = append(out, byte(characterID))
 	testutil.PutUint16(&out, postActionStateID)
 	testutil.PutFloat32(&out, postXpos)
 	testutil.PutFloat32(&out, postYPos)

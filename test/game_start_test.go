@@ -2,10 +2,28 @@ package test
 
 import (
 	goslippi "github.com/PMcca/go-slippi"
+	"github.com/PMcca/go-slippi/slippi/melee"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
+
+func TestGameStart(t *testing.T) {
+	t.Parallel()
+	t.Run("Parses0.1.0GameStartFromSlippiJS", func(t *testing.T) {
+		filePath := "replays/sheik_vs_ics_yoshis.slp"
+		actual, err := goslippi.ParseGame(filePath)
+		require.NoError(t, err)
+
+		gameStart := actual.Data.GameStart
+		require.Len(t, gameStart.Players, 4)
+
+		assert.Equal(t, melee.StageYoshisStory, gameStart.Stage)
+		assert.Equal(t, melee.Ext_Sheik, gameStart.Players[0].CharacterID)
+		assert.Equal(t, melee.Ext_IceClimbers, gameStart.Players[1].CharacterID)
+		assert.Equal(t, "0.1.0", gameStart.SlippiVersion)
+	})
+}
 
 func TestNametags(t *testing.T) {
 	t.Parallel()

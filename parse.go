@@ -21,6 +21,7 @@ var (
 		event.EventMessageSplitter: handlers.MessageSplitterHandler{},
 		event.EventPostFrame:       handlers.PostFrameHandler{},
 		event.EventItemUpdate:      handlers.ItemUpdateHandler{},
+		event.EventGameEnd:         handlers.GameEndHandler{},
 	}
 	log = logging.NewLogger()
 )

@@ -2,6 +2,11 @@ package slippi
 
 import "github.com/PMcca/go-slippi/slippi/melee"
 
+const (
+	FirstFrame         = -123
+	FirstPlayableFrame = -39
+)
+
 type HurtboxCollisionState uint8
 
 const (

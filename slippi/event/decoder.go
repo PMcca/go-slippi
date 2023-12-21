@@ -19,14 +19,9 @@ type Decoder struct {
 	Size int    // size is the size of the event being parsed, used for bounds checking.
 }
 
-func (d *Decoder) updateDataWindow(newStart int) {
-	d.Data = d.Data[newStart:]
-	d.Size = newStart
-}
-
 // Read returns a byte at the given offset.
 func (d *Decoder) Read(offset int) uint8 {
-	if offset > d.Size {
+	if offset >= d.Size {
 		return 0
 	}
 	return d.Data[offset]
@@ -34,7 +29,7 @@ func (d *Decoder) Read(offset int) uint8 {
 
 // ReadInt8 returns an int8 at the given offset.
 func (d *Decoder) ReadInt8(offset int) int8 {
-	if offset > d.Size {
+	if offset >= d.Size {
 		return 0
 	}
 	return int8(d.Data[offset])
@@ -42,7 +37,7 @@ func (d *Decoder) ReadInt8(offset int) int8 {
 
 // ReadN returns a slice of bytes between the given offset and the upperBound.
 func (d *Decoder) ReadN(offset, upperBound int) []byte {
-	if upperBound > d.Size {
+	if offset >= d.Size || upperBound > d.Size {
 		return nil
 	}
 	return d.Data[offset:upperBound]
@@ -50,7 +45,7 @@ func (d *Decoder) ReadN(offset, upperBound int) []byte {
 
 // ReadWithBitmask returns a byte bitwise-ANDed against the given bitmask.
 func (d *Decoder) ReadWithBitmask(offset int, bitmask byte) byte {
-	if offset > d.Size {
+	if offset >= d.Size {
 		return 0
 	}
 	return d.Data[offset] & bitmask
@@ -58,14 +53,14 @@ func (d *Decoder) ReadWithBitmask(offset int, bitmask byte) byte {
 
 // ReadUint16 returns an int from the 2 bytes from the offset the Decoder assumes represents a uint16.
 func (d *Decoder) ReadUint16(offset int) uint16 {
-	if offset+2 > d.Size {
+	if offset >= d.Size || offset+2 > d.Size {
 		return 0
 	}
 	return binary.BigEndian.Uint16(d.Data[offset : offset+2])
 }
 
 func (d *Decoder) ReadInt16(offset int) int {
-	if offset+2 > d.Size {
+	if offset >= d.Size || offset+2 > d.Size {
 		return 0
 	}
 	return int(int16(binary.BigEndian.Uint16(d.Data[offset : offset+2])))

@@ -8,7 +8,7 @@ import (
 
 type PostFrameHandler struct{}
 
-func (p PostFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
+func (h PostFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	if data.Frames == nil {
 		data.Frames = map[int]slippi.Frame{}
 	}
@@ -16,6 +16,7 @@ func (p PostFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	frameNumber := dec.ReadInt32(0x1)
 	playerIndex := dec.Read(0x5)
 	isFollower := dec.ReadBool(0x6)
+	internalCharacterID := melee.InternalCharacterID(dec.Read(0x7))
 	selfInducedSpeeds := slippi.SelfInducedSpeeds{
 		AirX:    dec.ReadFloat32(0x35),
 		AirY:    dec.ReadFloat32(0x39),
@@ -28,7 +29,7 @@ func (p PostFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 		FrameNumber:             frameNumber,
 		PlayerIndex:             playerIndex,
 		IsFollower:              isFollower,
-		CharacterID:             melee.InternalCharacterID(dec.Read(0x7)),
+		CharacterID:             internalCharacterID,
 		ActionStateID:           dec.ReadUint16(0x8),
 		XPos:                    dec.ReadFloat32(0xa),
 		YPos:                    dec.ReadFloat32(0xe),
@@ -62,6 +63,18 @@ func (p PostFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 		pl := frame.Players[playerIndex]
 		pl.Post = postFrame
 		frame.Players[playerIndex] = pl
+	}
+
+	// Pre-1.6.0, GameStart's CharacterID will be Zelda even if player started as Sheik. This check fixes this.
+	if frameNumber <= slippi.FirstFrame {
+		p := data.GameStart.Players[playerIndex]
+		switch internalCharacterID {
+		case melee.Int_Sheik:
+			p.CharacterID = melee.Ext_Sheik
+		case melee.Int_Zelda:
+			p.CharacterID = melee.Ext_Zelda
+		}
+		data.GameStart.Players[playerIndex] = p
 	}
 
 	data.Frames[frameNumber] = frame

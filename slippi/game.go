@@ -4,6 +4,7 @@ package slippi
 type Data struct {
 	GameStart GameStart
 	Frames    map[int]Frame // Map of FrameNumber -> Frame
+	GameEnd   GameEnd
 }
 
 // Game represents a parsed .slp game.

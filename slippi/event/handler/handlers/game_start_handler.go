@@ -5,7 +5,7 @@ import (
 	"github.com/PMcca/go-slippi/internal/util"
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/PMcca/go-slippi/slippi/event"
-	melee2 "github.com/PMcca/go-slippi/slippi/melee"
+	"github.com/PMcca/go-slippi/slippi/melee"
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
@@ -26,7 +26,7 @@ func (g GameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 		isFriendlyFire = true
 	}
 
-	enabledItems := melee2.GetEnabledItems(
+	enabledItems := melee.GetEnabledItems(
 		dec.Read(0x16),
 		dec.Read(0x17),
 		dec.Read(0x18),
@@ -54,7 +54,7 @@ func (g GameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 		IsFriendlyFire:     isFriendlyFire,
 		IsTeams:            dec.ReadBool(0xd),
 		ItemSpawnBehaviour: slippi.ItemSpawnBehaviour(dec.Read(0x10)),
-		Stage:              melee2.Stage(dec.ReadUint16(0x13)),
+		Stage:              melee.Stage(dec.ReadUint16(0x13)),
 		TimerStartSeconds:  dec.ReadInt32(0x15),
 		EnabledItems:       enabledItems,
 		Players:            players,
@@ -116,7 +116,7 @@ func parsePlayer(playerIndex int, dec *event.Decoder) (slippi.Player, error) {
 	return slippi.Player{
 		Index:                  playerIndex,
 		Port:                   playerIndex + 1,
-		CharacterID:            melee2.InternalCharacterID(dec.Read(0x65 + offset)),
+		CharacterID:            melee.ExternalCharacterID(dec.Read(0x65 + offset)),
 		PlayerType:             slippi.PlayerType(dec.Read(0x66 + offset)),
 		StartStocks:            dec.Read(0x67 + offset),
 		CostumeIndex:           dec.Read(0x68 + offset),

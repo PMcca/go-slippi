@@ -45,11 +45,11 @@ func TestParseMeta(t *testing.T) {
 						},
 						Characters: slippi.Characters{
 							{
-								CharacterID:  melee.Zelda,
+								CharacterID:  melee.Int_Zelda,
 								FramesPlayed: 532,
 							},
 							{
-								CharacterID:  melee.Sheik,
+								CharacterID:  melee.Int_Sheik,
 								FramesPlayed: 1603,
 							},
 						},
@@ -61,7 +61,7 @@ func TestParseMeta(t *testing.T) {
 						},
 						Characters: slippi.Characters{
 							{
-								CharacterID:  melee.Mario,
+								CharacterID:  melee.Int_Mario,
 								FramesPlayed: 2135,
 							},
 						},
