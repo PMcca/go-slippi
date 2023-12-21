@@ -7,7 +7,7 @@ import (
 
 type FrameStartHandler struct{}
 
-func (f FrameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
+func (h FrameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	frameNumber := dec.ReadInt32(0x1)
 	frameStart := slippi.FrameStart{
 		FrameNumber:       frameNumber,

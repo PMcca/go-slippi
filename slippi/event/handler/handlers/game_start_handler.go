@@ -14,7 +14,7 @@ import (
 
 type GameStartHandler struct{}
 
-func (g GameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
+func (h GameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	slippiVersion := fmt.Sprintf("%d.%d.%d",
 		dec.Read(0x1),
 		dec.Read(0x2),

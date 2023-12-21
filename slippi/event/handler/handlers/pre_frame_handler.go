@@ -7,7 +7,7 @@ import (
 
 type PreFrameHandler struct{}
 
-func (p PreFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
+func (h PreFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	if data.Frames == nil {
 		data.Frames = map[int]slippi.Frame{}
 	}

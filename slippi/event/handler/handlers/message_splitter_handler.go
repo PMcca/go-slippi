@@ -18,17 +18,17 @@ type MessageSplitterHandler struct{}
 
 // Parse implements the handler.EventHandler interface. It reads all the payloads of each MessageSplitter event
 // encountered, then passes these bytes in to the relevant handler.
-func (m MessageSplitterHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
+func (h MessageSplitterHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	// Read all contiguous MessageSplitter payloads into a buffer
 	eventCode := event.Code(dec.Read(0x203))
-	var buffer []byte
+	buffer := []byte{byte(eventCode)}
 	for {
 		// Assume all MessageSplitter events are contiguous. If we encounter a non-message splitter event, error.
 		if event.Code(dec.Read(0x0)) != event.EventMessageSplitter {
 			return fmt.Errorf("%w:eventCode %0x", ErrNoMessageSplitterCode, dec.Read(0x0))
 		}
 		eventSize := dec.ReadInt16(0x201)
-		buffer = append(buffer, dec.ReadN(0x1, eventSize)...)
+		buffer = append(buffer, dec.ReadN(0x1, 0x1+eventSize)...)
 
 		isLastMessage := dec.ReadBool(0x204)
 		if isLastMessage {

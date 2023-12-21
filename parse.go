@@ -17,12 +17,13 @@ var (
 	// TODO add GeckoCode and FrameBookend support
 	eventHandlers = map[event.Code]handler.EventHandler{
 		event.EventGameStart:       handlers.GameStartHandler{},
-		event.EventFrameStart:      handlers.FrameStartHandler{},
 		event.EventPreFrame:        handlers.PreFrameHandler{},
-		event.EventMessageSplitter: handlers.MessageSplitterHandler{},
 		event.EventPostFrame:       handlers.PostFrameHandler{},
-		event.EventItemUpdate:      handlers.ItemUpdateHandler{},
 		event.EventGameEnd:         handlers.GameEndHandler{},
+		event.EventFrameStart:      handlers.FrameStartHandler{},
+		event.EventItemUpdate:      handlers.ItemUpdateHandler{},
+		event.EventGeckoList:       handlers.GeckoCodeHandler{},
+		event.EventMessageSplitter: handlers.MessageSplitterHandler{},
 	}
 	log = logging.NewLogger()
 )
