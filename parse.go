@@ -14,6 +14,7 @@ import (
 )
 
 var (
+	// TODO add GeckoCode and FrameBookend support
 	eventHandlers = map[event.Code]handler.EventHandler{
 		event.EventGameStart:       handlers.GameStartHandler{},
 		event.EventFrameStart:      handlers.FrameStartHandler{},

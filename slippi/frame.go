@@ -98,8 +98,9 @@ type PostFrameUpdate struct {
 
 // PlayerFrameUpdate holds the Pre/Post-frame updates for a given player/follower.
 type PlayerFrameUpdate struct {
-	Pre  PreFrameUpdate
-	Post PostFrameUpdate
+	PlayerIndex uint8
+	Pre         PreFrameUpdate
+	Post        PostFrameUpdate
 }
 
 type FrameStart struct {

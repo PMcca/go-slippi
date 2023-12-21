@@ -46,6 +46,7 @@ func TestParsePreFrame(t *testing.T) {
 			expected: slippi.Frame{
 				Players: map[uint8]slippi.PlayerFrameUpdate{
 					2: slippi.PlayerFrameUpdate{
+						PlayerIndex: 2,
 						Pre: slippi.PreFrameUpdate{
 							FrameNumber:      -123,
 							PlayerIndex:      2,
@@ -82,6 +83,7 @@ func TestParsePreFrame(t *testing.T) {
 			expected: slippi.Frame{
 				Followers: map[uint8]slippi.PlayerFrameUpdate{
 					1: slippi.PlayerFrameUpdate{
+						PlayerIndex: 1,
 						Pre: slippi.PreFrameUpdate{
 							FrameNumber:      -21,
 							PlayerIndex:      1,

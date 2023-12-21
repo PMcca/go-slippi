@@ -43,10 +43,12 @@ func (p PreFrameHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	if isFollower {
 		f := frame.Followers[playerIndex]
 		f.Pre = preFrame
+		f.PlayerIndex = playerIndex
 		frame.Followers[playerIndex] = f
 	} else {
 		pl := frame.Players[playerIndex]
 		pl.Pre = preFrame
+		pl.PlayerIndex = playerIndex
 		frame.Players[playerIndex] = pl
 	}
 
