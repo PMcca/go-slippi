@@ -5,8 +5,6 @@ import (
 	"math"
 )
 
-// TODO add tests
-
 // Decoder wraps the raw data of a .slp file. It serves as a window into a specific part of the array, which is then
 // acted upon by the corresponding offsets defined in the .slp spec (https://github.com/project-slippi/slippi-wiki/blob/master/SPEC.md)
 // Decoder.size is the eventSize+1, because the size of the data is a valid index. e.g:

@@ -54,7 +54,7 @@ type PreFrameUpdate struct {
 	PlayerIndex      uint8
 	IsFollower       bool
 	RandomSeed       uint32
-	ActionStateID    uint16 //TODO enum?
+	ActionStateID    uint16
 	XPos             float32
 	YPos             float32
 	FacingDirection  float32

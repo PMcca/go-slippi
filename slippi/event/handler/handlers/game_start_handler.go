@@ -117,8 +117,8 @@ func parsePlayer(playerIndex int, dec *event.Decoder) (slippi.Player, error) {
 	playerBitfield := dec.Read(0x6c + playerIndex*0x24)
 
 	return slippi.Player{
-		Index:                  playerIndex,
-		Port:                   playerIndex + 1,
+		Index:                  uint8(playerIndex),
+		Port:                   int8(playerIndex + 1),
 		CharacterID:            melee.ExternalCharacterID(dec.Read(0x65 + offset)),
 		PlayerType:             slippi.PlayerType(dec.Read(0x66 + offset)),
 		StartStocks:            dec.Read(0x67 + offset),

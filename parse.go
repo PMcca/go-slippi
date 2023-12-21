@@ -14,7 +14,6 @@ import (
 )
 
 var (
-	// TODO add FrameBookend support
 	eventHandlers = map[event.Code]handler.EventHandler{
 		event.EventGameStart:       handlers.GameStartHandler{},
 		event.EventPreFrame:        handlers.PreFrameHandler{},
@@ -69,7 +68,7 @@ func ParseGame(filePath string) (slippi.Game, error) {
 func (r *rawParser) UnmarshalUBJSON(b []byte) error {
 	// Beginning of raw array should always be '$U#l'.
 	if !bytes.Equal(b[0:4], []byte("$U#l")) {
-		return fmt.Errorf("%w:expected '$U#l', found %s", ErrInvalidRawStart, b[0:4]) // TODO move errors?
+		return fmt.Errorf("%w:expected '$U#l', found %s", ErrInvalidRawStart, b[0:4])
 	}
 
 	dec := event.Decoder{

@@ -79,8 +79,8 @@ const (
 
 // Player is a player in-game.
 type Player struct {
-	Index                  int // Port = Index + 1
-	Port                   int
+	Index                  uint8 // Port = Index + 1
+	Port                   int8
 	CharacterID            melee.ExternalCharacterID
 	PlayerType             PlayerType
 	StartStocks            uint8
@@ -99,8 +99,8 @@ type Player struct {
 	CPULevel               uint8
 	OffenseRatio           float32
 	DefenseRation          float32
-	ModelScale             float32 // TODO or float?
-	ControllerFix          string  // TODO What is this?
+	ModelScale             float32
+	ControllerFix          string
 	Nametag                string
 	DisplayName            string
 	ConnectCode            string

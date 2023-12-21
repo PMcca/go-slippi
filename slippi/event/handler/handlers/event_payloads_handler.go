@@ -8,7 +8,7 @@ import (
 // It does not implement the handler.EventHandler interface, unlike the other handlers.
 func ParseEventPayloads(d *event.Decoder) (map[event.Code]int, error) {
 	if event.Code(d.Read(0)) != event.EventPayloadsEvent {
-		return nil, ErrEventPayloadsNotFound // TODO move errors
+		return nil, ErrEventPayloadsNotFound
 	}
 	payloadSize := d.Read(1)
 

@@ -215,7 +215,7 @@ func TestZeldaSheikFix(t *testing.T) {
 				GameStart: slippi.GameStart{
 					Players: []slippi.Player{
 						{
-							Index: 0, // TODO change to uint8
+							Index: 0,
 						},
 					},
 				},
