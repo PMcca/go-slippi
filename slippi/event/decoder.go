@@ -37,7 +37,7 @@ func (d *Decoder) ReadInt8(offset int) int8 {
 
 // ReadN returns a slice of bytes between the given offset and the upperBound.
 func (d *Decoder) ReadN(offset, upperBound int) []byte {
-	if offset >= d.Size || upperBound > d.Size {
+	if offset >= d.Size || upperBound > d.Size || offset >= upperBound {
 		return nil
 	}
 	return d.Data[offset:upperBound]
