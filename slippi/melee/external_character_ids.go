@@ -1,5 +1,6 @@
 package melee
 
+// ExternalCharacterID is the External ID of the character which Melee uses.
 type ExternalCharacterID uint8
 
 const (

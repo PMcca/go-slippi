@@ -54,24 +54,22 @@ func (c *Characters) UnmarshalUBJSON(b []byte) error {
 	for {
 		// First byte will be 'U', so skip over it.
 		i++
-
 		if i >= len(b) {
 			break
 		}
-
-		character := Character{}
 
 		// Read the size of the ID in bytes
 		idLen := int(b[i])
 		i++
 
-		id, err := strconv.Atoi(string(b[i : i+idLen]))
+		characterID, err := strconv.Atoi(string(b[i : i+idLen]))
 		if err != nil {
-			return err
+			return fmt.Errorf("%w:failed to convert metadata CharacterID to int", err)
 		}
 		i += idLen
 
-		character.CharacterID = melee.InternalCharacterID(id)
+		character := Character{}
+		character.CharacterID = melee.InternalCharacterID(characterID)
 
 		// Next byte = 'l', read next 4 bytes
 		if b[i] != 'l' {

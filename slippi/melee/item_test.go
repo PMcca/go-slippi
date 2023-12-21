@@ -7,7 +7,6 @@ import (
 
 func Test_allItemsOrder(t *testing.T) {
 	t.Parallel()
-
 	t.Run("allItemsArrayIsInExpectedOrder", func(t *testing.T) {
 		expected := []Item{
 			MetalBox,
@@ -58,7 +57,6 @@ func Test_allItemsOrder(t *testing.T) {
 
 func Test_concatenateBitfields(t *testing.T) {
 	t.Parallel()
-
 	t.Run("ConcatenatesItemBitfieldsIntoInt64", func(t *testing.T) {
 		bitfield1 := uint8(0b10000001)
 		bitfield2 := uint8(0b00110011)
@@ -70,13 +68,11 @@ func Test_concatenateBitfields(t *testing.T) {
 		actual := concatenateBitfields(bitfield1, bitfield2, bitfield3, bitfield4, bitfield5)
 
 		require.Equal(t, expected, actual)
-
 	})
 }
 
 func TestGetEnabledItems(t *testing.T) {
 	t.Parallel()
-
 	testCases := map[string]struct {
 		itemBitfield1 uint8
 		itemBitfield2 uint8

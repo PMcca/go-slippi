@@ -12,7 +12,6 @@ import (
 
 func TestParseMessageSplitter(t *testing.T) {
 	t.Parallel()
-
 	testCases := map[string]struct {
 		inputConfigureFunc func(b []byte)
 		expected           slippi.Data

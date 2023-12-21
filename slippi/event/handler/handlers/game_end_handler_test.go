@@ -19,7 +19,6 @@ var (
 
 func TestParseGameEnd(t *testing.T) {
 	t.Parallel()
-
 	testCases := map[string]struct {
 		expected     slippi.GameEnd
 		errAssertion require.ErrorAssertionFunc
@@ -53,7 +52,6 @@ func TestParseGameEnd(t *testing.T) {
 
 	for name, testCase := range testCases {
 		tc := testCase
-
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 

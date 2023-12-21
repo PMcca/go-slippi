@@ -41,7 +41,6 @@ var (
 
 func TestParsePostFrame(t *testing.T) {
 	t.Parallel()
-
 	testCases := map[string]struct {
 		frameNumber int
 		playerIndex uint8
@@ -153,7 +152,6 @@ func TestParsePostFrame(t *testing.T) {
 
 	for name, testCase := range testCases {
 		tc := testCase
-
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
@@ -175,7 +173,6 @@ func TestParsePostFrame(t *testing.T) {
 
 func TestZeldaSheikFix(t *testing.T) {
 	t.Parallel()
-
 	testCases := map[string]struct {
 		internalCharacterID melee.InternalCharacterID
 		expected            slippi.Player
@@ -201,7 +198,6 @@ func TestZeldaSheikFix(t *testing.T) {
 
 	for name, testCase := range testCases {
 		tc := testCase
-
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 

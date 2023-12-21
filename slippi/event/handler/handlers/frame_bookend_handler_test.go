@@ -29,7 +29,6 @@ func TestParseFrameBookend(t *testing.T) {
 
 	for name, testCase := range testCases {
 		tc := testCase
-
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 

@@ -10,7 +10,6 @@ import (
 
 func TestParseEventPayloads(t *testing.T) {
 	t.Parallel()
-
 	testCases := map[string]struct {
 		input        []byte
 		expected     map[event.Code]int
@@ -47,7 +46,6 @@ func TestParseEventPayloads(t *testing.T) {
 
 	for name, testCase := range testCases {
 		tc := testCase
-
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 

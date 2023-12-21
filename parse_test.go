@@ -11,7 +11,6 @@ var rawStart = []byte("$U#l")
 
 func TestParseGame(t *testing.T) {
 	t.Parallel()
-
 	testCases := map[string]struct {
 		filePath     string
 		expected     slippi.Game
@@ -36,12 +35,10 @@ func TestParseGame(t *testing.T) {
 
 	for name, testCase := range testCases {
 		tc := testCase
-
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
 			actual, err := ParseGame(tc.filePath)
-
 			tc.errAssertion(t, err)
 			require.Equal(t, tc.expected, actual)
 
@@ -51,7 +48,6 @@ func TestParseGame(t *testing.T) {
 
 func TestData_UnmarshalUBJSON(t *testing.T) {
 	t.Parallel()
-
 	testCases := map[string]struct {
 		input        []byte
 		expected     rawParser
@@ -66,7 +62,6 @@ func TestData_UnmarshalUBJSON(t *testing.T) {
 
 	for name, testCase := range testCases {
 		tc := testCase
-
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 

@@ -30,7 +30,6 @@ var (
 
 func TestParseItemUpdate(t *testing.T) {
 	t.Parallel()
-
 	testCases := map[string]struct {
 		frameNumber  int
 		expected     slippi.Frame
@@ -70,7 +69,6 @@ func TestParseItemUpdate(t *testing.T) {
 
 	for name, testCase := range testCases {
 		tc := testCase
-
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 

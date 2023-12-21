@@ -1,5 +1,6 @@
 package handlers
 
+// Error is an error that can occur in this package.
 type Error string
 
 const (
@@ -13,6 +14,7 @@ const (
 	ErrUnknownMessageSplitEvent Error = "unknown event in message splitters"
 )
 
+// Error implements the error interface.
 func (e Error) Error() string {
 	return string(e)
 }
