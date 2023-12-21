@@ -8,7 +8,6 @@ import (
 
 func TestPlayersEliminated(t *testing.T) {
 	t.Parallel()
-
 	filePath := "replays/doubles.slp"
 	actual, err := goslippi.ParseGame(filePath)
 	require.NoError(t, err)

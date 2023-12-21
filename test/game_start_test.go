@@ -65,7 +65,6 @@ func TestPAL(t *testing.T) {
 	t.Parallel()
 	t.Run("ReadsPALGame", func(t *testing.T) {
 		t.Parallel()
-
 		filePath := "replays/pal.slp"
 		actual, err := goslippi.ParseGame(filePath)
 		require.NoError(t, err)
