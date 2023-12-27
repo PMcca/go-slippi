@@ -1,9 +1,9 @@
 package goslippi
 
 import (
-	"github.com/PMcca/go-slippi/internal/testutil"
-	"github.com/PMcca/go-slippi/slippi"
-	"github.com/PMcca/go-slippi/slippi/melee"
+	"github.com/pmcca/go-slippi/internal/testutil"
+	"github.com/pmcca/go-slippi/slippi"
+	"github.com/pmcca/go-slippi/slippi/melee"
 	"github.com/stretchr/testify/require"
 	"testing"
 )

@@ -1,6 +1,6 @@
 package slippi
 
-import "github.com/PMcca/go-slippi/slippi/melee"
+import "github.com/pmcca/go-slippi/slippi/melee"
 
 // TimerType is the behaviour of the timer i.e. timer is incrementing or decrementing.
 type TimerType uint8

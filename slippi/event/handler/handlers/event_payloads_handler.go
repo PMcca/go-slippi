@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/PMcca/go-slippi/slippi/event"
+	"github.com/pmcca/go-slippi/slippi/event"
 )
 
 // ParseEventPayloads parses the EventPayloads command from the byte array, by returning a map of Code -> Event Size.

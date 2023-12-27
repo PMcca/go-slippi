@@ -2,8 +2,8 @@ package event_test
 
 import (
 	"encoding/binary"
-	"github.com/PMcca/go-slippi/internal/testutil"
-	"github.com/PMcca/go-slippi/slippi/event"
+	"github.com/pmcca/go-slippi/internal/testutil"
+	"github.com/pmcca/go-slippi/slippi/event"
 	"github.com/stretchr/testify/require"
 	"testing"
 )

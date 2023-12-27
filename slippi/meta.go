@@ -3,7 +3,7 @@ package slippi
 import (
 	"encoding/binary"
 	"fmt"
-	"github.com/PMcca/go-slippi/slippi/melee"
+	"github.com/pmcca/go-slippi/slippi/melee"
 	"strconv"
 )
 

@@ -1,8 +1,8 @@
 package test
 
 import (
-	goslippi "github.com/PMcca/go-slippi"
-	"github.com/PMcca/go-slippi/slippi"
+	goslippi "github.com/pmcca/go-slippi"
+	"github.com/pmcca/go-slippi/slippi"
 	"github.com/stretchr/testify/require"
 	"testing"
 )

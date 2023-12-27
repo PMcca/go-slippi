@@ -2,10 +2,10 @@ package handlers_test
 
 import (
 	"encoding/binary"
-	"github.com/PMcca/go-slippi/internal/testutil"
-	"github.com/PMcca/go-slippi/slippi"
-	"github.com/PMcca/go-slippi/slippi/event"
-	"github.com/PMcca/go-slippi/slippi/event/handler/handlers"
+	"github.com/pmcca/go-slippi/internal/testutil"
+	"github.com/pmcca/go-slippi/slippi"
+	"github.com/pmcca/go-slippi/slippi/event"
+	"github.com/pmcca/go-slippi/slippi/event/handler/handlers"
 	"github.com/stretchr/testify/require"
 	"testing"
 )

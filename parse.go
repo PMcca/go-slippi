@@ -3,12 +3,12 @@ package goslippi
 import (
 	"bytes"
 	"fmt"
-	"github.com/PMcca/go-slippi/internal/errutil"
-	"github.com/PMcca/go-slippi/internal/logging"
-	"github.com/PMcca/go-slippi/slippi"
-	"github.com/PMcca/go-slippi/slippi/event"
-	"github.com/PMcca/go-slippi/slippi/event/handler"
-	"github.com/PMcca/go-slippi/slippi/event/handler/handlers"
+	"github.com/pmcca/go-slippi/internal/errutil"
+	"github.com/pmcca/go-slippi/internal/logging"
+	"github.com/pmcca/go-slippi/slippi"
+	"github.com/pmcca/go-slippi/slippi/event"
+	"github.com/pmcca/go-slippi/slippi/event/handler"
+	"github.com/pmcca/go-slippi/slippi/event/handler/handlers"
 	"github.com/toitware/ubjson"
 	"os"
 )

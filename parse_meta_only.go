@@ -1,8 +1,8 @@
 package goslippi
 
 import (
-	"github.com/PMcca/go-slippi/internal/errutil"
-	"github.com/PMcca/go-slippi/slippi"
+	"github.com/pmcca/go-slippi/internal/errutil"
+	"github.com/pmcca/go-slippi/slippi"
 	"github.com/toitware/ubjson"
 )
 

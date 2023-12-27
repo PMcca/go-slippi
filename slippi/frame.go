@@ -1,6 +1,6 @@
 package slippi
 
-import "github.com/PMcca/go-slippi/slippi/melee"
+import "github.com/pmcca/go-slippi/slippi/melee"
 
 const (
 	FirstFrame         = -123

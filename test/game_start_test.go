@@ -1,11 +1,11 @@
 package test
 
 import (
-	goslippi "github.com/PMcca/go-slippi"
-	"github.com/PMcca/go-slippi/slippi"
-	"github.com/PMcca/go-slippi/slippi/melee"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	goslippi "github.com/pmcca/go-slippi"
+	"github.com/pmcca/go-slippi/slippi"
+	"github.com/pmcca/go-slippi/slippi/melee"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"

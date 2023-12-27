@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/PMcca/go-slippi/internal/util"
-	"github.com/PMcca/go-slippi/slippi"
-	"github.com/PMcca/go-slippi/slippi/event"
-	"github.com/PMcca/go-slippi/slippi/melee"
+	"github.com/pmcca/go-slippi/internal/util"
+	"github.com/pmcca/go-slippi/slippi"
+	"github.com/pmcca/go-slippi/slippi/event"
+	"github.com/pmcca/go-slippi/slippi/melee"
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"

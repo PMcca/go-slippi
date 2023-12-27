@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/PMcca/go-slippi/slippi"
-	"github.com/PMcca/go-slippi/slippi/event"
+	"github.com/pmcca/go-slippi/slippi"
+	"github.com/pmcca/go-slippi/slippi/event"
 )
 
 // GameEndHandler handles the parsing of GameEnd events.

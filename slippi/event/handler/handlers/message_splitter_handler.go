@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/PMcca/go-slippi/internal/logging"
-	"github.com/PMcca/go-slippi/slippi"
-	"github.com/PMcca/go-slippi/slippi/event"
+	"github.com/pmcca/go-slippi/internal/logging"
+	"github.com/pmcca/go-slippi/slippi"
+	"github.com/pmcca/go-slippi/slippi/event"
 )
 
 var log = logging.NewLogger()

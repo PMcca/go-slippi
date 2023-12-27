@@ -1,4 +1,4 @@
-module github.com/PMcca/go-slippi
+module github.com/pmcca/go-slippi
 
 go 1.21
 

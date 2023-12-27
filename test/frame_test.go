@@ -1,10 +1,10 @@
 package test
 
 import (
-	"github.com/PMcca/go-slippi/slippi"
-	"github.com/PMcca/go-slippi/slippi/melee"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/pmcca/go-slippi/slippi"
+	"github.com/pmcca/go-slippi/slippi/melee"
 	"github.com/stretchr/testify/require"
 	"strconv"
 	"testing"
