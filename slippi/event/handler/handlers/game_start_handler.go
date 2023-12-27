@@ -30,11 +30,11 @@ func (h GameStartHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	}
 
 	enabledItems := melee.GetEnabledItems(
-		dec.Read(0x16),
-		dec.Read(0x17),
-		dec.Read(0x18),
-		dec.Read(0x19),
-		dec.Read(0x20))
+		dec.Read(0x28),
+		dec.Read(0x29),
+		dec.Read(0x2A),
+		dec.Read(0x2B),
+		dec.Read(0x2C))
 
 	players := make([]slippi.Player, 4)
 	for i := 0; i < 4; i++ {
@@ -99,15 +99,15 @@ func parsePlayer(playerIndex int, dec *event.Decoder) (slippi.Player, error) {
 	if err != nil {
 		return slippi.Player{}, fmt.Errorf("%w:failed to parse name tag", err)
 	}
-	displayName, err := parseGameStartString((0x1f*playerIndex)+0x1a5, 0x1a5, dec, jisDecoder, true)
+	displayName, err := parseGameStartString((0x1f*playerIndex)+0x1a5, 0x1f, dec, jisDecoder, true)
 	if err != nil {
 		return slippi.Player{}, fmt.Errorf("%w:failed to parse display name", err)
 	}
-	connectCode, err := parseGameStartString((0xa*playerIndex)+0x221, 0x221, dec, jisDecoder, true)
+	connectCode, err := parseGameStartString((0xa*playerIndex)+0x221, 0xa, dec, jisDecoder, true)
 	if err != nil {
 		return slippi.Player{}, fmt.Errorf("%w:failed to parse connect code", err)
 	}
-	userID, err := parseGameStartString((0x1d*playerIndex)+0x249, 0x249, dec, unicode.UTF8.NewDecoder(), false)
+	userID, err := parseGameStartString((0x1d*playerIndex)+0x249, 0x1d, dec, unicode.UTF8.NewDecoder(), false)
 	if err != nil {
 		return slippi.Player{}, fmt.Errorf("%w:failed to parse userID", err)
 	}
@@ -136,10 +136,10 @@ func parsePlayer(playerIndex int, dec *event.Decoder) (slippi.Player, error) {
 		IsRumbleEnabled:        playerBitfield&0x80 > 0,
 		CPULevel:               dec.Read(0x74 + offset),
 		OffenseRatio:           dec.ReadFloat32(0x7d + offset),
-		DefenseRation:          dec.ReadFloat32(0x81 + offset),
+		DefenseRatio:           dec.ReadFloat32(0x81 + offset),
 		ModelScale:             dec.ReadFloat32(0x85 + offset),
 		ControllerFix:          controllerFix,
-		Nametag:                nameTag,
+		NameTag:                nameTag,
 		DisplayName:            displayName,
 		ConnectCode:            connectCode,
 		UserID:                 userID,

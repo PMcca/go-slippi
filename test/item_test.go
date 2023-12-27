@@ -9,7 +9,7 @@ import (
 
 func TestItem(t *testing.T) {
 	t.Parallel()
-	filePath := "replays/itemExport.slp"
+	filePath := "replays/item-export.slp"
 
 	t.Run("MonotonicallyIncrementsItemSpawnID", func(t *testing.T) {
 		t.Parallel()
@@ -24,7 +24,7 @@ func TestItem(t *testing.T) {
 			if !ok {
 				break
 			}
-			for _, item := range frame.ItemUpdate {
+			for _, item := range frame.ItemUpdates {
 				if lastSpawnID < int(item.SpawnID) {
 					require.Equal(t, lastSpawnID+1, int(item.SpawnID), "Frame: %d", i)
 					lastSpawnID = int(item.SpawnID)
@@ -46,7 +46,7 @@ func TestItem(t *testing.T) {
 			if !ok {
 				break
 			}
-			for _, item := range frame.ItemUpdate {
+			for _, item := range frame.ItemUpdates {
 				require.LessOrEqual(t, item.Owner, int8(3))
 				require.GreaterOrEqual(t, item.Owner, int8(-1))
 			}

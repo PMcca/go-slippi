@@ -98,10 +98,10 @@ type Player struct {
 	IsRumbleEnabled        bool
 	CPULevel               uint8
 	OffenseRatio           float32
-	DefenseRation          float32
+	DefenseRatio           float32
 	ModelScale             float32
 	ControllerFix          string
-	Nametag                string
+	NameTag                string
 	DisplayName            string
 	ConnectCode            string
 	UserID                 string
@@ -117,7 +117,7 @@ type GameStart struct {
 	ItemSpawnBehaviour ItemSpawnBehaviour
 	Stage              melee.Stage
 	TimerStartSeconds  int
-	EnabledItems       []melee.Item
+	EnabledItems       []melee.EnabledItem
 	Players            []Player
 	Scene              uint8 // Minor scene, should always be 0x2
 	GameMode           GameMode

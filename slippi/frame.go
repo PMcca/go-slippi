@@ -119,7 +119,7 @@ type FrameStart struct {
 // ItemUpdate represents a parsed event.EventItemUpdate event.
 type ItemUpdate struct {
 	FrameNumber          int
-	ItemTypeID           uint16
+	ItemTypeID           melee.Item
 	State                uint8
 	FacingDirection      float32
 	XVelocity            float32
@@ -149,6 +149,6 @@ type Frame struct {
 	FrameStart   FrameStart
 	Players      map[uint8]PlayerFrameUpdate // Map of PlayerIndex -> PlayerFrameUpdate
 	Followers    map[uint8]PlayerFrameUpdate
-	ItemUpdate   []ItemUpdate
+	ItemUpdates  []ItemUpdate
 	FrameBookend FrameBookend
 }

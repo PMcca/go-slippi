@@ -13,7 +13,6 @@ func TestMetadataParse(t *testing.T) {
 	t.Parallel()
 	t.Run("SuccessfullyParsesMetadata", func(t *testing.T) {
 		t.Parallel()
-
 		expected := slippi.Metadata{
 			StartAt:   "2022-12-02T18:09:00Z",
 			LastFrame: 2011,
@@ -50,11 +49,53 @@ func TestMetadataParse(t *testing.T) {
 			PlayedOn: "dolphin",
 		}
 
-		filePath := "replays/metadata.slp"
-		actual, err := goslippi.ParseMeta(filePath)
-		require.NoError(t, err)
+		actual := mustParseSlippiMeta(t, "replays/metadata.slp")
+		require.Equal(t, expected, actual)
+	})
+	t.Run("ParsesLocalReplay", func(t *testing.T) {
+		t.Parallel()
+		expected := slippi.Metadata{
+			StartAt:   "2023-12-24T09:33:18Z",
+			LastFrame: 7075,
+			Players: slippi.PlayersMeta{
+				Port1: slippi.PlayerMeta{
+					Characters: slippi.Characters{
+						{
+							CharacterID:  melee.Int_Fox,
+							FramesPlayed: 7199,
+						},
+					},
+				},
+				Port2: slippi.PlayerMeta{
+					Characters: slippi.Characters{
+						{
+							CharacterID:  melee.Int_Marth,
+							FramesPlayed: 6324,
+						},
+					},
+				},
+				Port3: slippi.PlayerMeta{
+					Characters: slippi.Characters{
+						{
+							CharacterID:  melee.Int_Samus,
+							FramesPlayed: 7199,
+						},
+					},
+				},
+				Port4: slippi.PlayerMeta{
+					Characters: slippi.Characters{
+						{
+							CharacterID:  melee.Int_Roy,
+							FramesPlayed: 2182,
+						},
+					},
+				},
+			},
+			PlayedOn: "dolphin",
+		}
 
-		assert.Equal(t, expected, actual)
+		actual := mustParseSlippiMeta(t, "replays/4-player-offline.slp")
+		require.Equal(t, expected, actual)
 	})
 }
 
@@ -63,7 +104,7 @@ func TestNetplayNamesCodes(t *testing.T) {
 	t.Run("ReadsNetplayNamesAndCodes", func(t *testing.T) {
 		t.Parallel()
 
-		filePath := "replays/finalizedFrame.slp"
+		filePath := "replays/finalized-frame.slp"
 		actual, err := goslippi.ParseMeta(filePath)
 		require.NoError(t, err)
 
@@ -85,4 +126,11 @@ func TestConsoleNickname(t *testing.T) {
 
 		assert.Equal(t, "Day 1", actual.ConsoleNick)
 	})
+}
+
+// mustParseSlippiMeta parses and returns slippi Metadata, or fails the test if an error occurred.
+func mustParseSlippiMeta(t *testing.T, filePath string) slippi.Metadata {
+	actual, err := goslippi.ParseMeta(filePath)
+	require.NoError(t, err)
+	return actual
 }

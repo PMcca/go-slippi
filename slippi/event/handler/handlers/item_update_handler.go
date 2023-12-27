@@ -3,12 +3,13 @@ package handlers
 import (
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/PMcca/go-slippi/slippi/event"
+	"github.com/PMcca/go-slippi/slippi/melee"
 )
 
-// ItemUpdateHandler handles the parsing of ItemUpdate events.
+// ItemUpdateHandler handles the parsing of ItemUpdates events.
 type ItemUpdateHandler struct{}
 
-// Parse implements the handler.EventHandler interface. It parses a ItemUpdate event and puts its output into the
+// Parse implements the handler.EventHandler interface. It parses a ItemUpdates event and puts its output into the
 // given slippi.Data struct.
 func (h ItemUpdateHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	if data.Frames == nil {
@@ -17,7 +18,7 @@ func (h ItemUpdateHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	frameNumber := dec.ReadInt32(0x1)
 	itemUpdate := slippi.ItemUpdate{
 		FrameNumber:          frameNumber,
-		ItemTypeID:           dec.ReadUint16(0x5),
+		ItemTypeID:           melee.Item(dec.ReadUint16(0x5)),
 		State:                dec.Read(0x7),
 		FacingDirection:      dec.ReadFloat32(0x8),
 		XVelocity:            dec.ReadFloat32(0xc),
@@ -36,7 +37,7 @@ func (h ItemUpdateHandler) Parse(dec *event.Decoder, data *slippi.Data) error {
 	}
 
 	frame := fetchFrame(frameNumber, data)
-	frame.ItemUpdate = append(frame.ItemUpdate, itemUpdate)
+	frame.ItemUpdates = append(frame.ItemUpdates, itemUpdate)
 	data.Frames[frameNumber] = frame
 
 	return nil

@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/google/go-cmp v0.6.0
 	github.com/rs/zerolog v1.31.0
 	github.com/stretchr/testify v1.8.0
 	github.com/toitware/ubjson v0.0.0-20231002110407-71c8fab5e607

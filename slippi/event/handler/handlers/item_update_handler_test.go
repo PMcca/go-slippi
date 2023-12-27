@@ -5,12 +5,13 @@ import (
 	"github.com/PMcca/go-slippi/slippi"
 	"github.com/PMcca/go-slippi/slippi/event"
 	"github.com/PMcca/go-slippi/slippi/event/handler/handlers"
+	"github.com/PMcca/go-slippi/slippi/melee"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 var (
-	itemTypeID          = uint16(101)
+	itemTypeID          = melee.ItemNessBat
 	itemState           = uint8(123)
 	itemFacingDirection = float32(1.23)
 	itemXVel            = float32(12.9)
@@ -38,10 +39,10 @@ func TestParseItemUpdate(t *testing.T) {
 		"CreatesItemUpdateForItem": {
 			frameNumber: -123,
 			expected: slippi.Frame{
-				ItemUpdate: []slippi.ItemUpdate{
+				ItemUpdates: []slippi.ItemUpdate{
 					{
 						FrameNumber:          -123,
-						ItemTypeID:           itemTypeID,
+						ItemTypeID:           melee.ItemNessBat,
 						State:                itemState,
 						FacingDirection:      itemFacingDirection,
 						XVelocity:            itemXVel,
@@ -92,7 +93,7 @@ func buildItemUpdateInput(frameNumber int32) []byte {
 	out := []byte{byte(event.EventItemUpdate)}
 
 	testutil.PutInt32(&out, frameNumber)
-	testutil.PutUint16(&out, itemTypeID)
+	testutil.PutUint16(&out, uint16(itemTypeID))
 	out = append(out, itemState)
 	testutil.PutFloat32(&out, itemFacingDirection)
 	testutil.PutFloat32(&out, itemXVel)

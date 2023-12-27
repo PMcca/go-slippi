@@ -28,7 +28,7 @@ func TestParseEventPayloads(t *testing.T) {
 		"ReturnsSizesOfEvents": {
 			input: []byte{
 				byte(event.EventPayloadsEvent),
-				7, // Size of eventPayloads = 4-1 = 3
+				7, // Size = this + the following 6 bytes = 7
 				byte(event.EventGameStart),
 				2,
 				3, // size is uint16 so 2 bytes
