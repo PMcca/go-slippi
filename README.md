@@ -11,7 +11,7 @@ package main
 
 import (
 	"fmt"
-	goslippi "github.com/PMcca/go-slippi"
+	goslippi "github.com/pmcca/go-slippi"
 	"log"
 )
 
@@ -32,17 +32,17 @@ package main
 
 import (
 	"fmt"
-	goslippi "github.com/PMcca/go-slippi"
+	goslippi "github.com/pmcca/go-slippi"
 	"log"
 )
 
 func main() {
 	filePath := "path/to/my-replay.slp"
-	game, err := goslippi.ParseMeta(filePath)
+	meta, err := goslippi.ParseMeta(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(game.Players)
+	fmt.Println(meta.Players)
 }
 ```
