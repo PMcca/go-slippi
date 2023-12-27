@@ -303,7 +303,7 @@ func TestOffline4PlayerFrames(t *testing.T) {
 				ExpirationTimer:      32,
 				SpawnID:              2,
 				MissileType:          slippi.MissileType(240), // Garbage data
-				TurnipFace:           slippi.TurnipFace(0),    // TODO why not 0?
+				TurnipFace:           slippi.TurnipFace(0),    // Garbage data
 				ChargeShotIsLaunched: false,
 				ChargeShotPower:      91, // Garbage data
 				Owner:                0,
