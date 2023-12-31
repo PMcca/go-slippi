@@ -1,16 +1,13 @@
 package test
 
 import (
-	goslippi "github.com/pmcca/go-slippi"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestPlayersEliminated(t *testing.T) {
 	t.Parallel()
-	filePath := "replays/doubles.slp"
-	actual, err := goslippi.ParseGame(filePath)
-	require.NoError(t, err)
+	actual := mustParseSlippiGame(t, "replays/doubles.slp")
 	require.Len(t, actual.Data.GameStart.Players, 4)
 
 	p1ElimFrame := 7754

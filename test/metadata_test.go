@@ -1,7 +1,6 @@
 package test
 
 import (
-	goslippi "github.com/pmcca/go-slippi"
 	"github.com/pmcca/go-slippi/slippi"
 	"github.com/pmcca/go-slippi/slippi/melee"
 	"github.com/stretchr/testify/assert"
@@ -104,10 +103,7 @@ func TestNetplayNamesCodes(t *testing.T) {
 	t.Run("ReadsNetplayNamesAndCodes", func(t *testing.T) {
 		t.Parallel()
 
-		filePath := "replays/finalized-frame.slp"
-		actual, err := goslippi.ParseMeta(filePath)
-		require.NoError(t, err)
-
+		actual := mustParseSlippiMeta(t, "replays/finalized-frame.slp")
 		assert.Equal(t, "V", actual.Players.Port1.Names.Name)
 		assert.Equal(t, "VA#0", actual.Players.Port1.Names.SlippiCode)
 		assert.Equal(t, "Fizzi", actual.Players.Port2.Names.Name)
@@ -120,17 +116,7 @@ func TestConsoleNickname(t *testing.T) {
 	t.Run("ReadsConsoleNickname", func(t *testing.T) {
 		t.Parallel()
 
-		filePath := "replays/realtimeTest.slp"
-		actual, err := goslippi.ParseMeta(filePath)
-		require.NoError(t, err)
-
-		assert.Equal(t, "Day 1", actual.ConsoleNick)
+		actual := mustParseSlippiMeta(t, "replays/realtimeTest.slp")
+		require.Equal(t, "Day 1", actual.ConsoleNick)
 	})
-}
-
-// mustParseSlippiMeta parses and returns slippi Metadata, or fails the test if an error occurred.
-func mustParseSlippiMeta(t *testing.T, filePath string) slippi.Metadata {
-	actual, err := goslippi.ParseMeta(filePath)
-	require.NoError(t, err)
-	return actual
 }

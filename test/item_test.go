@@ -1,7 +1,6 @@
 package test
 
 import (
-	goslippi "github.com/pmcca/go-slippi"
 	"github.com/pmcca/go-slippi/slippi"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -13,9 +12,8 @@ func TestItem(t *testing.T) {
 
 	t.Run("MonotonicallyIncrementsItemSpawnID", func(t *testing.T) {
 		t.Parallel()
-		actual, err := goslippi.ParseGame(filePath)
-		require.NoError(t, err)
 
+		actual := mustParseSlippiGame(t, filePath)
 		lastSpawnID := -1
 		frames := actual.Data.Frames
 		i := slippi.FirstFrame
@@ -36,9 +34,8 @@ func TestItem(t *testing.T) {
 	})
 	t.Run("ItemsHaveValidOwnerIDs", func(t *testing.T) {
 		t.Parallel()
-		actual, err := goslippi.ParseGame(filePath)
-		require.NoError(t, err)
 
+		actual := mustParseSlippiGame(t, filePath)
 		frames := actual.Data.Frames
 		i := slippi.FirstFrame
 		for {

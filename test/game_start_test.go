@@ -3,7 +3,6 @@ package test
 import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	goslippi "github.com/pmcca/go-slippi"
 	"github.com/pmcca/go-slippi/slippi"
 	"github.com/pmcca/go-slippi/slippi/melee"
 	"github.com/stretchr/testify/assert"
@@ -59,7 +58,6 @@ func TestGameStart(t *testing.T) {
 		t.Parallel()
 
 		actual := mustParseSlippiGame(t, "replays/sheik_vs_ics_yoshis.slp")
-
 		gameStart := actual.Data.GameStart
 		require.Len(t, gameStart.Players, 4)
 
@@ -395,11 +393,4 @@ func TestMatchInfo(t *testing.T) {
 		assert.Equal(t, 0, gameStart.TiebreakerNumber, "TieBreakerNumber not equal")
 		assert.Equal(t, "", gameStart.MatchID)
 	})
-}
-
-// mustParseSlippiGame parses and returns a Slippi game, or fails the test if an error occurred.
-func mustParseSlippiGame(t *testing.T, filePath string) slippi.Game {
-	actual, err := goslippi.ParseGame(filePath)
-	require.NoError(t, err)
-	return actual
 }

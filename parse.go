@@ -72,12 +72,12 @@ func (r *rawParser) UnmarshalUBJSON(b []byte) error {
 	}
 
 	dec := event.Decoder{
-		Data: b[8:],
+		Data: b[8:], // Skip $U#l and 4 bytes for length. Next byte should be EventPayloads code.
 		Size: len(b),
 	}
-	eventSizes, err := handlers.ParseEventPayloads(&dec) // Skip $U#l and 4 bytes for length.
+	eventSizes, err := handlers.ParseEventPayloads(&dec)
 	if err != nil {
-		return err
+		return fmt.Errorf("%w:failed to parse event payloads", err)
 	}
 
 	startOffset := (eventSizes[event.EventPayloadsEvent] + 1) + 8 // Start reading from the first event after EventPayloads

@@ -32,7 +32,6 @@ func TestParseMeta(t *testing.T) {
 		},
 		"ParsesAndReturnsMeta": {
 			filePath: "test/replays/metadata.slp",
-			//filePath: "testdata/valid-meta-1-player.ubj",
 			expected: slippi.Metadata{
 				StartAt:   "2022-12-02T18:09:00Z",
 				LastFrame: 2011,

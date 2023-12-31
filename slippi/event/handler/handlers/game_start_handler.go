@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/pmcca/go-slippi/internal/util"
 	"github.com/pmcca/go-slippi/slippi"
 	"github.com/pmcca/go-slippi/slippi/event"
 	"github.com/pmcca/go-slippi/slippi/melee"
@@ -157,8 +156,29 @@ func parseGameStartString(stringStart, stringLength int, dec *event.Decoder, tra
 
 	result := strings.Split(string(t), "\x00")[0] // Strip any nil's
 	if result != "" && toHalfWidth {
-		result = util.ToHalfWidthChars(result)
+		result = toHalfWidthChars(result)
 	}
 
 	return result, nil
+}
+
+// toHalfWidthChars takes a Shift JIS-decoded string and converts specific bytes to half-width.
+func toHalfWidthChars(s string) string {
+	var ret []rune
+	for _, c := range s {
+		switch {
+		case c > 0xff00 && c < 0xff5f:
+			ret = append(ret, 0x0020+(c-0xff00))
+		case c == 0x3000: // Space
+			ret = append(ret, 0x0020)
+		case c == 0x2019: //Single quote (')
+			ret = append(ret, 0x0027)
+		case c == 0x201d: // Double quote (")
+			ret = append(ret, 0x0022)
+		default:
+			ret = append(ret, c)
+		}
+	}
+
+	return string(ret)
 }

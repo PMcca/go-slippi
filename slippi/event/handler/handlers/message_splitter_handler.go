@@ -49,6 +49,8 @@ func (h MessageSplitterHandler) Parse(dec *event.Decoder, data *slippi.Data) err
 				Size: len(buffer),
 			}, data)
 	default:
+		log.Error().
+			Msgf("MessageSplitter event not for GeckoCode list, was %X. go-slippi currently only supports MessageSplitter events for GeckoCodes.", eventCode)
 		return ErrUnknownMessageSplitEvent
 	}
 }

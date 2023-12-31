@@ -7,8 +7,6 @@ import (
 	"testing"
 )
 
-var rawStart = []byte("$U#l")
-
 func TestParseGame(t *testing.T) {
 	t.Parallel()
 	testCases := map[string]struct {
@@ -67,7 +65,6 @@ func TestData_UnmarshalUBJSON(t *testing.T) {
 
 			d := rawParser{}
 			err := d.UnmarshalUBJSON(tc.input)
-
 			tc.errAssertion(t, err)
 			require.Equal(t, tc.expected, d)
 		})
