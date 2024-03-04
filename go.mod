@@ -14,7 +14,7 @@ require (
 require (
 	github.com/google/go-cmp v0.6.0
 	github.com/rs/zerolog v1.32.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/toitware/ubjson v0.0.0-20231002110407-71c8fab5e607
 	golang.org/x/text v0.14.0
 )
