@@ -16,5 +16,5 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
 	github.com/toitware/ubjson v0.0.0-20231002110407-71c8fab5e607
-	golang.org/x/text v0.19.0
+	golang.org/x/text v0.20.0
 )
