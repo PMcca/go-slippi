@@ -1,6 +1,6 @@
 module github.com/pmcca/go-slippi
 
-go 1.21
+go 1.23.0
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -16,5 +16,5 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.10.0
 	github.com/toitware/ubjson v0.0.0-20231002110407-71c8fab5e607
-	golang.org/x/text v0.22.0
+	golang.org/x/text v0.25.0
 )
