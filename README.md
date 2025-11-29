@@ -1,3 +1,8 @@
+# ⚠️ Moved to Codeberg 
+This repostiory is now read-only and has been moved to [Codeberg](https://codeberg.org/PMcca/go-slippi).
+
+---
+
 # go-slippi
 
 `go-slippi` is a Golang (1.21) parser for `.slp` slippi files. It (currently only) supports parsing .slp files into Go 
